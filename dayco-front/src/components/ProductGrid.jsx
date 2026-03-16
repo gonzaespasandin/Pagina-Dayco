@@ -29,7 +29,7 @@ function ProductGrid() {
     if (productos.length === 0) return <div className="grid__estado">No hay productos disponibles.</div>;
     
     return (
-      <section className="product-grid">
+      <section id='productos' className="product-grid">
         <div className="product-grid__header">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import './Hero.css';
 
 function Hero() {
@@ -31,9 +30,9 @@ function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <Link to="/productos" className="hero__btn">
+            <a href="#productos" className="hero__btn">
               Ver Productos
-            </Link>
+            </a>
           </motion.div>
         </div>
       </section>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEnvelope, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faEnvelope, faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ICONOS_DISPONIBLES } from '../components/admin/IconSelector';
 import api from '../api/axios';
 import Navbar from '../components/Navbar';
@@ -10,7 +10,6 @@ import Footer from '../components/Footer';
 import './ProductoDetalle.css';
 
 // Helper: dado el nombre de un ícono (ej: "faTv"), devuelve el componente FA correspondiente.
-// Si no está en la lista, devuelve null.
 function Icono({ nombre, className }) {
   const encontrado = ICONOS_DISPONIBLES.find(i => i.nombre === nombre);
   if (!encontrado) return null;
@@ -19,8 +18,13 @@ function Icono({ nombre, className }) {
 
 // ── Animaciones reutilizables ────────────────────────────────────────────────
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 36 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.09 } },
 };
 
 function ProductoDetalle() {
@@ -28,11 +32,6 @@ function ProductoDetalle() {
   const [producto, setProducto] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
-
-  // Estado para el selector de variantes
-  const [varianteActiva, setVarianteActiva] = useState(0);
-
-  // Estado para el lightbox de galería
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
@@ -62,7 +61,10 @@ function ProductoDetalle() {
   if (cargando) return (
     <>
       <Navbar />
-      <div className="pd__loading">Cargando producto...</div>
+      <div className="pd__loading">
+        <div className="pd__loading-spinner" />
+        <span>Cargando producto...</span>
+      </div>
     </>
   );
 
@@ -90,84 +92,156 @@ function ProductoDetalle() {
 
       {/* ── 1. Hero ──────────────────────────────────────────────────────────── */}
       <section className="pd__hero">
+        {/* Gradiente decorativo derecho (reemplaza los orbs invisibles) */}
+        <div className="pd__hero-bg-accent" aria-hidden="true" />
+
         <div className="pd__hero-container">
-          <motion.div className="pd__hero-text" variants={fadeUp} initial="hidden" animate="visible">
+          {/* Columna de texto */}
+          <motion.div
+            className="pd__hero-text"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="pd__span_back_link">
             <Link to="/#productos" className="pd__back-link">
               <FontAwesomeIcon icon={faArrowLeft} /> Volver a productos
             </Link>
-            <h1 className="pd__hero-titulo">{titulo}</h1>
+            </span>
+
             {subtitulo && <p className="pd__hero-subtitulo">{subtitulo}</p>}
+            <h1 className="pd__hero-titulo">{titulo}</h1>
             {descripcion && <p className="pd__hero-descripcion">{descripcion}</p>}
 
             {/* Badges del hero */}
             {features_hero?.length > 0 && (
-              <div className="pd__hero-badges">
+              <motion.div
+                className="pd__hero-badges"
+                variants={stagger}
+                initial="hidden"
+                animate="visible"
+              >
                 {features_hero.map((f, i) => (
-                  <span key={i} className="pd__hero-badge">
+                  <motion.span key={i} className="pd__hero-badge" variants={fadeUp}>
                     {f.icono && <Icono nombre={f.icono} />}
                     {f.texto}
-                  </span>
+                  </motion.span>
                 ))}
-              </div>
+              </motion.div>
             )}
 
             <a href="/#contacto" className="pd__hero-cta">
-              <FontAwesomeIcon icon={faEnvelope} /> Consultar por este producto
+              <FontAwesomeIcon icon={faEnvelope} />
+              <span>Consultar este producto</span>
+              <div className="pd__shimmer" aria-hidden="true" />
             </a>
           </motion.div>
 
+          {/* Columna de imagen — con animación de flotación perpetua */}
           <motion.div
-            className="pd__hero-imagen"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.1 } }}
+            className="pd__hero-imagen-wrap"
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
-            {imagen_url
-              ? <img src={`${imgBase}${imagen_url}`} alt={titulo} />
-              : <div className="pd__hero-imagen-placeholder" />
-            }
+            {/* Sombra difusa debajo de la imagen */}
+            <div className="pd__hero-shadow" aria-hidden="true" />
+
+            {/* La imagen flota suavemente de forma continua */}
+            <motion.div
+              className="pd__hero-imagen"
+              animate={{ y: [0, -14, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+            >
+              {imagen_url
+                ? <img src={`${imgBase}${imagen_url}`} alt={titulo} />
+                : <div className="pd__hero-imagen-placeholder" />
+              }
+            </motion.div>
           </motion.div>
         </div>
       </section>
+
+      {/* ── Marquee strip — rompe la monotonía del scroll ───────────────────── */}
+      {(() => {
+        const items = ['Tecnología Nacional', 'Diseño Modular', 'Servicio Online', 'Fabricación Argentina', 'Asistencia Inmediata', 'Más de 35 años'];
+        // 4 copias + animamos -50% (= 2 copias): garantiza que siempre hay contenido en pantalla
+        return (
+          <div className="pd__marquee-strip" aria-hidden="true">
+            <div className="pd__marquee-track">
+              {[...items, ...items, ...items, ...items].map((item, i) => (
+                <span key={i} className="pd__marquee-item">
+                  <span className="pd__marquee-dot" />
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── 2. Descripción larga ─────────────────────────────────────────────── */}
       {descripcion_larga && (
         <section className="pd__descripcion">
           <div className="pd__container">
-            <motion.p variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              {descripcion_larga}
-            </motion.p>
+            <motion.div
+              className="pd__descripcion-inner"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+            >
+              <div className="pd__descripcion-accent" aria-hidden="true" />
+              <blockquote className="pd__descripcion-texto">
+                {descripcion_larga}
+              </blockquote>
+            </motion.div>
           </div>
         </section>
       )}
 
-      {/* ── 3. Características (feature cards) ───────────────────────────────── */}
+      {/* ── 3. Características — Bento Grid ──────────────────────────────────── */}
       {caracteristicas?.length > 0 && (
         <section className="pd__caracteristicas">
           <div className="pd__container">
-            <motion.h2 variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Características Principales
-            </motion.h2>
-            <div className="pd__caracteristicas-grid">
+            <motion.div
+              className="pd__section-header"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+            >
+              <span className="pd__section-label">Tecnología</span>
+              <h2>Características Principales</h2>
+            </motion.div>
+
+            <motion.div
+              className="pd__bento-grid"
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+            >
               {caracteristicas.map((c, i) => (
                 <motion.div
                   key={i}
-                  className="pd__feature-card"
+                  className={`pd__bento-card ${i === 0 && caracteristicas.length >= 3 ? 'pd__bento-card--featured' : ''}`}
                   variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.07 }}
                 >
+                  <div className="pd__bento-card-glow" aria-hidden="true" />
                   {c.icono && (
-                    <div className="pd__feature-card-icon">
-                      <Icono nombre={c.icono} />
+                    <div className="pd__bento-icon-wrap">
+                      <div className="pd__bento-icon-halo" aria-hidden="true" />
+                      <div className="pd__bento-icon">
+                        <Icono nombre={c.icono} />
+                      </div>
                     </div>
                   )}
-                  <h3>{c.titulo}</h3>
-                  <p>{c.descripcion}</p>
+                  <h3 className="pd__bento-title">{c.titulo}</h3>
+                  <p className="pd__bento-desc">{c.descripcion}</p>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
@@ -176,57 +250,75 @@ function ProductoDetalle() {
       {variantes?.length > 0 && (
         <section className="pd__variantes">
           <div className="pd__container">
-            <motion.h2 variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Modelos Disponibles
-            </motion.h2>
-            <div className="pd__variantes-chips">
+            <motion.div
+              className="pd__section-header"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <span className="pd__section-label">Configuración</span>
+              <h2>Modelos Disponibles</h2>
+            </motion.div>
+
+            <div className="pd__variantes-grid">
               {variantes.map((v, i) => (
-                <button
+                <motion.div
                   key={i}
-                  className={`pd__variante-chip ${varianteActiva === i ? 'pd__variante-chip--active' : ''}`}
-                  onClick={() => setVarianteActiva(i)}
+                  className="pd__variante-card"
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
                 >
-                  {v.nombre}
-                </button>
+                  <div className="pd__variante-card-glow" aria-hidden="true" />
+                  <div className="pd__variante-card-inner">
+                    <span className="pd__variante-numero">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="pd__variante-nombre">{v.nombre}</span>
+                    {v.detalle && <p className="pd__variante-detalle-texto">{v.detalle}</p>}
+                  </div>
+                </motion.div>
               ))}
             </div>
-            <motion.div
-              key={varianteActiva}
-              className="pd__variante-detalle"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              <span className="pd__variante-nombre">{variantes[varianteActiva].nombre}</span>
-              {variantes[varianteActiva].detalle && (
-                <span className="pd__variante-detalle-texto">{variantes[varianteActiva].detalle}</span>
-              )}
-            </motion.div>
           </div>
         </section>
       )}
 
-      {/* ── 5. Galería ───────────────────────────────────────────────────────── */}
+      {/* ── 5. Galería — scroll horizontal ───────────────────────────────────── */}
       {galeria?.length > 0 && (
         <section className="pd__galeria">
           <div className="pd__container">
-            <motion.h2 variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Galería
-            </motion.h2>
+            <motion.div
+              className="pd__section-header"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <span className="pd__section-label">Imágenes</span>
+              <h2>Galería</h2>
+            </motion.div>
+          </div>
+
+          <div className="pd__container">
             <div className="pd__galeria-grid">
               {galeria.map((img, i) => (
                 <motion.div
                   key={i}
                   className="pd__galeria-item"
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.06 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ delay: i * 0.06, duration: 0.5 }}
                   onClick={() => setLightboxIndex(i)}
+                  whileHover={{ y: -8 }}
                 >
                   <img src={`${imgBase}${img.url}`} alt={img.caption || `Imagen ${i + 1}`} />
-                  {img.caption && <div className="pd__galeria-caption">{img.caption}</div>}
+                  <div className="pd__galeria-overlay">
+                    {img.caption && <span className="pd__galeria-caption">{img.caption}</span>}
+                    <span className="pd__galeria-zoom-icon">↗</span>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -238,21 +330,30 @@ function ProductoDetalle() {
       {especificaciones?.length > 0 && (
         <section className="pd__especificaciones">
           <div className="pd__container">
-            <motion.h2 variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Especificaciones Técnicas
-            </motion.h2>
             <motion.div
-              className="pd__specs-tabla"
+              className="pd__section-header"
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
             >
+              <span className="pd__section-label">Técnico</span>
+              <h2>Especificaciones</h2>
+            </motion.div>
+
+            <motion.div
+              className="pd__specs-tabla"
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               {especificaciones.map((e, i) => (
-                <div key={i} className={`pd__specs-row ${i % 2 === 0 ? 'pd__specs-row--par' : ''}`}>
+                <motion.div key={i} className="pd__specs-row" variants={fadeUp}>
+                  <div className="pd__specs-row-bar" aria-hidden="true" />
                   <span className="pd__specs-label">{e.label}</span>
                   <span className="pd__specs-valor">{e.valor}</span>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
           </div>
@@ -263,31 +364,45 @@ function ProductoDetalle() {
       {aplicaciones?.length > 0 && (
         <section className="pd__aplicaciones">
           <div className="pd__container">
-            <motion.h2 variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Aplicaciones
-            </motion.h2>
-            <div className="pd__aplicaciones-grid">
+            <motion.div
+              className="pd__section-header"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <span className="pd__section-label">Usos</span>
+              <h2>Aplicaciones</h2>
+            </motion.div>
+
+            <motion.div
+              className="pd__aplicaciones-grid"
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               {aplicaciones.map((a, i) => (
                 <motion.div
                   key={i}
-                  className="pd__aplicacion-item"
+                  className="pd__aplicacion-card"
                   variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ y: -5, scale: 1.03 }}
                 >
-                  {a.icono && <Icono nombre={a.icono} className="pd__aplicacion-icon" />}
-                  <span>{a.nombre}</span>
+                  <div className="pd__aplicacion-icon-wrap">
+                    {a.icono && <Icono nombre={a.icono} className="pd__aplicacion-icon" />}
+                  </div>
+                  <span className="pd__aplicacion-nombre">{a.nombre}</span>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
 
       {/* ── 8. CTA final ─────────────────────────────────────────────────────── */}
       <section className="pd__cta">
+        <div className="pd__cta-orb" aria-hidden="true" />
         <div className="pd__container">
           <motion.div
             className="pd__cta-inner"
@@ -296,33 +411,67 @@ function ProductoDetalle() {
             whileInView="visible"
             viewport={{ once: true }}
           >
+            <span className="pd__section-label pd__section-label--ghost">Contacto</span>
             <h2>¿Te interesa este producto?</h2>
             <p>Consultanos sin compromiso, te respondemos a la brevedad.</p>
             <a href="/#contacto" className="pd__cta-btn">
-              <FontAwesomeIcon icon={faEnvelope} /> Contactar ahora
+              <FontAwesomeIcon icon={faEnvelope} />
+              Contactar ahora
+              <div className="pd__shimmer" aria-hidden="true" />
             </a>
           </motion.div>
         </div>
       </section>
 
       {/* ── Lightbox ─────────────────────────────────────────────────────────── */}
-      {lightboxIndex !== null && galeria?.length > 0 && (
-        <div className="pd__lightbox" onClick={() => setLightboxIndex(null)}>
-          <button className="pd__lightbox-nav pd__lightbox-nav--prev" onClick={(e) => { e.stopPropagation(); avanzarLightbox(-1); }}>
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          <div className="pd__lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <img src={`${imgBase}${galeria[lightboxIndex].url}`} alt={galeria[lightboxIndex].caption || ''} />
-            {galeria[lightboxIndex].caption && (
-              <p className="pd__lightbox-caption">{galeria[lightboxIndex].caption}</p>
-            )}
-          </div>
-          <button className="pd__lightbox-nav pd__lightbox-nav--next" onClick={(e) => { e.stopPropagation(); avanzarLightbox(1); }}>
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-          <button className="pd__lightbox-close" onClick={() => setLightboxIndex(null)}>✕</button>
-        </div>
-      )}
+      <AnimatePresence>
+        {lightboxIndex !== null && galeria?.length > 0 && (
+          <motion.div
+            className="pd__lightbox"
+            onClick={() => setLightboxIndex(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              className="pd__lightbox-nav pd__lightbox-nav--prev"
+              onClick={(e) => { e.stopPropagation(); avanzarLightbox(-1); }}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+
+            <motion.div
+              className="pd__lightbox-content"
+              onClick={(e) => e.stopPropagation()}
+              key={lightboxIndex}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.25 }}
+            >
+              <img
+                src={`${imgBase}${galeria[lightboxIndex].url}`}
+                alt={galeria[lightboxIndex].caption || ''}
+              />
+              {galeria[lightboxIndex].caption && (
+                <p className="pd__lightbox-caption">{galeria[lightboxIndex].caption}</p>
+              )}
+            </motion.div>
+
+            <button
+              className="pd__lightbox-nav pd__lightbox-nav--next"
+              onClick={(e) => { e.stopPropagation(); avanzarLightbox(1); }}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+
+            <button className="pd__lightbox-close" onClick={() => setLightboxIndex(null)}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </>
