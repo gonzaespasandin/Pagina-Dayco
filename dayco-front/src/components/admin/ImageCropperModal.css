@@ -1,0 +1,120 @@
+.crop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* por encima de pform__overlay */
+  padding: 1rem;
+}
+
+.crop-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.crop-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid #eee;
+}
+
+.crop-modal__header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222833;
+  margin: 0;
+}
+
+.crop-modal__close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.crop-modal__close:hover { color: #222; }
+
+/* Toggles de ratio */
+.crop-modal__ratios {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+}
+
+.crop-modal__ratio-btn {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #64748b;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.crop-modal__ratio-btn:hover {
+  border-color: #9c3ce9;
+  color: #9c3ce9;
+}
+
+.crop-modal__ratio-btn--active {
+  background: rgba(156, 60, 233, 0.1);
+  border-color: #9c3ce9;
+  color: #9c3ce9;
+  font-weight: 600;
+}
+
+/* El área del cropper necesita una altura fija explícita */
+.crop-modal__area {
+  position: relative;
+  height: 340px;
+  background: #111;
+}
+
+.crop-modal__zoom {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.4rem 0.5rem;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.crop-modal__slider {
+  flex: 1;
+  accent-color: #9c3ce9;
+  cursor: pointer;
+  height: 4px;
+}
+
+.crop-modal__tip {
+  margin: 0;
+  padding: 0.5rem 1.4rem 0.75rem;
+  font-size: 0.82rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+.crop-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.9rem 1.4rem 1.2rem;
+  justify-content: flex-end;
+}

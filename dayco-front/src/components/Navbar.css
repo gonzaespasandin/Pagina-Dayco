@@ -1,0 +1,115 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 5%;
+  transition: var(--transition);
+}
+
+.navbar--solido {
+  background: rgba(7, 4, 15, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(156, 60, 233, 0.2), 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.navbar__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: opacity 0.2s;
+}
+
+.navbar__logo:hover {
+  opacity: 0.85;
+}
+
+.navbar__links {
+  list-style: none;
+  display: flex;
+  gap: 0;
+}
+
+.navbar__links li a {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  font-size: 1.05rem;
+  padding: 0.5rem 1.1rem;
+  position: relative;
+  transition: color 0.2s;
+  display: block;
+}
+
+.navbar__links li a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gradient);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.navbar__links li a:hover {
+  color: var(--color-white);
+}
+
+.navbar__links li a:hover::after {
+  width: 80%;
+}
+
+.navbar__hamburger {
+  display: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--color-white);
+  font-size: 1.2rem;
+  padding: 0.4rem 0.7rem;
+  transition: border-color 0.2s;
+}
+
+.navbar__hamburger:hover {
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .navbar__hamburger {
+    display: block;
+  }
+
+  .navbar__links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: rgba(7, 4, 15, 0.97);
+    backdrop-filter: blur(16px);
+    padding: 1.5rem 5%;
+    gap: 0.2rem;
+    border-top: 1px solid rgba(156, 60, 233, 0.2);
+  }
+
+  .navbar__links--abierto {
+    display: flex;
+  }
+
+  .navbar__links li a {
+    font-size: 1.1rem;
+    padding: 0.7rem 0;
+  }
+}

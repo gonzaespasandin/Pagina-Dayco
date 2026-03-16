@@ -1,0 +1,376 @@
+.pform__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+}
+
+.pform {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  margin: auto;
+}
+
+/* Versión ancha para el form con tabs */
+.pform--wide {
+  max-width: 680px;
+}
+
+.pform__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.pform__header h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.pform__close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.pform__close:hover {
+  color: var(--color-text);
+  background: #f1f5f9;
+}
+
+/* ── Tabs ──────────────────────────────────────────────── */
+.pform__tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 1.5rem;
+  gap: 0;
+}
+
+.pform__tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.pform__tab:hover {
+  color: var(--color-text);
+}
+
+.pform__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ── Body con scroll ───────────────────────────────────── */
+.pform__body {
+  padding: 1.5rem 2rem;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+/* ── Campos ────────────────────────────────────────────── */
+.pform__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.pform__field label {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pform__field input,
+.pform__field textarea {
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  color: var(--color-text);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+}
+
+.pform__field input::placeholder,
+.pform__field textarea::placeholder {
+  color: #cbd5e1;
+}
+
+.pform__field input:focus,
+.pform__field textarea:focus {
+  border-color: var(--color-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(156, 60, 233, 0.1);
+}
+
+/* ── Upload imagen principal ───────────────────────────── */
+.pform__upload {
+  border: 2px dashed #e2e8f0;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f8f9fa;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.pform__upload:hover {
+  border-color: var(--color-primary);
+  background: rgba(156, 60, 233, 0.03);
+}
+
+.pform__upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.pform__upload-placeholder span:first-child {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.pform__preview {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
+/* ── Secciones dentro de tabs ──────────────────────────── */
+.pform__section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.pform__section-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.pform__divider {
+  border: none;
+  border-top: 1px dashed #e2e8f0;
+  margin: 1.25rem 0;
+}
+
+/* ── Array items (cards editables) ────────────────────────────────────────── */
+.pform__array-item {
+  position: relative;
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1rem 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Versión en fila (especificaciones, variantes) */
+.pform__array-item--row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.pform__array-item--row .pform__field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Item con preview de imagen (galería) */
+.pform__array-item--galeria {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.pform__array-item--galeria .pform__array-delete {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+.pform__galeria-preview {
+  background: #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pform__galeria-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Botón de borrar item */
+.pform__array-delete {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+
+.pform__array-delete:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+/* Versión en fila (estático, no absolute) */
+.pform__array-delete--row {
+  position: static;
+  align-self: flex-end;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+/* Botón agregar */
+.pform__array-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: 1px dashed var(--color-primary);
+  border-radius: 8px;
+  color: var(--color-primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.pform__array-add:hover {
+  background: rgba(156, 60, 233, 0.06);
+}
+
+/* Variante de upload (es un <label>) */
+.pform__array-add--upload {
+  cursor: pointer;
+}
+
+.pform__array-add--loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Error ──────────────────────────────────────────────── */
+.pform__error {
+  color: #ef4444;
+  font-size: 0.85rem;
+  text-align: center;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin: 0 2rem 0.5rem;
+}
+
+/* ── Actions ────────────────────────────────────────────── */
+.pform__actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  padding: 1rem 2rem 1.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.pform__btn {
+  padding: 0.7rem 1.6rem;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pform__btn--cancel {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.pform__btn--cancel:hover {
+  background: #e2e8f0;
+  color: var(--color-text);
+}
+
+.pform__btn--save {
+  background: var(--gradient);
+  color: var(--color-white);
+  box-shadow: var(--shadow-purple);
+}
+
+.pform__btn--save:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-purple-lg);
+}
+
+.pform__btn--save:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
