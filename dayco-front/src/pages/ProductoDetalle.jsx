@@ -147,17 +147,12 @@ function ProductoDetalle() {
             {/* Sombra difusa debajo de la imagen */}
             <div className="pd__hero-shadow" aria-hidden="true" />
 
-            {/* La imagen flota suavemente de forma continua */}
-            <motion.div
-              className="pd__hero-imagen"
-              animate={{ y: [0, -14, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-            >
+            <div className="pd__hero-imagen">
               {imagen_url
                 ? <img src={`${imgBase}${imagen_url}`} alt={titulo} />
                 : <div className="pd__hero-imagen-placeholder" />
               }
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -225,10 +220,13 @@ function ProductoDetalle() {
               {caracteristicas.map((c, i) => (
                 <motion.div
                   key={i}
-                  className={`pd__bento-card ${i === 0 && caracteristicas.length >= 3 ? 'pd__bento-card--featured' : ''}`}
+                  className="pd__bento-card"
                   variants={fadeUp}
                 >
                   <div className="pd__bento-card-glow" aria-hidden="true" />
+                  <span className="pd__bento-num" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   {c.icono && (
                     <div className="pd__bento-icon-wrap">
                       <div className="pd__bento-icon-halo" aria-hidden="true" />
@@ -272,11 +270,16 @@ function ProductoDetalle() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <div className="pd__variante-card-glow" aria-hidden="true" />
                   <div className="pd__variante-card-inner">
-                    <span className="pd__variante-numero">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="pd__variante-nombre">{v.nombre}</span>
-                    {v.detalle && <p className="pd__variante-detalle-texto">{v.detalle}</p>}
+                    <span className="pd__variante-numero" aria-hidden="true">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div className="pd__variante-divider" aria-hidden="true" />
+                    <div className="pd__variante-content">
+                      <span className="pd__variante-nombre">{v.nombre}</span>
+                      {v.detalle && <p className="pd__variante-detalle-texto">{v.detalle}</p>}
+                    </div>
+                    <FontAwesomeIcon icon={faChevronRight} className="pd__variante-chevron" aria-hidden="true" />
                   </div>
                 </motion.div>
               ))}
@@ -302,11 +305,21 @@ function ProductoDetalle() {
           </div>
 
           <div className="pd__container">
-            <div className="pd__galeria-grid">
+            {(() => {
+              const n = galeria.length;
+              const gridClass = n === 1 ? 'pd__galeria-grid--1'
+                : n === 2 ? 'pd__galeria-grid--2'
+                : n === 3 ? 'pd__galeria-grid--3'
+                : n === 4 ? 'pd__galeria-grid--4'
+                : 'pd__galeria-grid--many';
+              // featured solo cuando el layout lo aprovecha (no en 2 ni en 4)
+              const usaFeatured = n === 3 || n >= 5;
+              return (
+            <div className={`pd__galeria-grid ${gridClass}`}>
               {galeria.map((img, i) => (
                 <motion.div
                   key={i}
-                  className="pd__galeria-item"
+                  className={`pd__galeria-item${i === 0 && usaFeatured ? ' pd__galeria-item--featured' : ''}`}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, margin: '-30px' }}
@@ -322,6 +335,8 @@ function ProductoDetalle() {
                 </motion.div>
               ))}
             </div>
+              );
+            })()}
           </div>
         </section>
       )}
