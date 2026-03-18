@@ -58,7 +58,7 @@ function Contacto() {
           >
             <iframe
               title="Ubicación Dayco Gaming"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.0!2d-58.5!3d-34.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zUmFmYWVsYSA0NjIx!5e0!3m2!1ses!2sar!4v1"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.6248059350532!2d-58.494666823543824!3d-34.63892057294174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcc9bb1b852499%3A0x98b2a5e2d8fbd0ee!2sDayco%20Gaming%20S.A.!5e0!3m2!1ses!2sar!4v1773841836412!5m2!1ses!2sar"
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

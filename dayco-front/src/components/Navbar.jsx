@@ -30,7 +30,7 @@ function Navbar() {
     return (
         <nav className={`navbar ${scrolled || !esHome ? 'navbar--solido' : ''}`}>
           <Link to="/" className="navbar__logo" onClick={cerrarTodo}>
-            Dayco Gaming
+            <img src="/LogoDaycoGaming.png" alt="Dayco Gaming" />
           </Link>
           <button
             className="navbar__hamburger"
@@ -39,7 +39,7 @@ function Navbar() {
             ☰
           </button>
           <ul className={`navbar__links ${menuAbierto ? 'navbar__links--abierto' : ''}`}>
-            <li><Link to="/" onClick={cerrarTodo}>Inicio</Link></li>
+            <li><a href="/#inicio" onClick={cerrarTodo}>Inicio</a></li>
 
             <li className="navbar__dropdown-wrap">
               <button

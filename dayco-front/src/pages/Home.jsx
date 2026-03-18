@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import ProductGrid from '../components/ProductGrid';
+import Reacondicionamiento from '../components/Reacondicionamiento';
 import Nosotros from '../components/Nosotros';
 import Casinos from '../components/Casinos';
 import Contacto from '../components/Contacto';
@@ -11,6 +12,7 @@ function Home() {
       <Navbar />
       <Hero />
       <ProductGrid />
+      <Reacondicionamiento />
       <Nosotros />
       <Casinos />
       <Contacto />

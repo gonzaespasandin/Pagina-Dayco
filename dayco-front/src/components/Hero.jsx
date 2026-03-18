@@ -3,10 +3,15 @@ import './Hero.css';
 
 function Hero() {
     return (
-      <section className="hero">
+      <section id="inicio" className="hero">
         <div className="hero__video">
-          <video autoPlay loop muted playsInline poster="/fallback.png">
+          {/* Desktop — se oculta en mobile por CSS, el navegador no lo descarga */}
+          <video className="hero__video--desktop" autoPlay loop muted playsInline poster="/fallback.png">
             <source src="/videonativa.mp4" type="video/mp4" />
+          </video>
+          {/* Mobile — se oculta en desktop por CSS */}
+          <video className="hero__video--mobile" autoPlay loop muted playsInline poster="/fallback-movil.png">
+            <source src="/videonativa-celular.mp4" type="video/mp4" />
           </video>
         </div>
         <div className="hero__overlay" />

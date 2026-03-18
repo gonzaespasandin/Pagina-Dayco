@@ -1,0 +1,162 @@
+/* ================================================
+   Reacondicionamiento — prefijo .reac__
+   ================================================ */
+
+.reac {
+  background: var(--color-bg);
+  padding: 5rem 1.5rem;
+}
+
+.reac__container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Título centrado */
+.reac__header {
+  text-align: center;
+  margin-bottom: 0; /* el .divider ya tiene margin-bottom en global.css */
+}
+
+/* ── Layout dos columnas ── */
+.reac__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+@media (max-width: 768px) {
+  .reac__body {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* ── Carrusel ── */
+.reac__carousel-wrap {
+  width: 100%;
+}
+
+.reac__carousel {
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-purple);
+  aspect-ratio: 4 / 3;
+  background: #000;
+}
+
+/* Cada slide ocupa toda el área; sólo el activo es visible */
+.reac__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.reac__slide--active {
+  opacity: 1;
+}
+
+.reac__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Etiqueta ANTES / DESPUÉS centrada sobre la imagen */
+.reac__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+}
+
+/* Botones prev / next */
+.reac__ctrl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  color: #fff;
+  font-size: 2.2rem;
+  line-height: 1;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  transition: background 0.25s;
+  z-index: 2;
+}
+
+.reac__ctrl:hover {
+  background: rgba(156, 60, 233, 0.7);
+}
+
+.reac__ctrl--prev { left: 0.6rem; }
+.reac__ctrl--next { right: 0.6rem; }
+
+/* Indicadores (puntos) */
+.reac__indicators {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.reac__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.3s;
+  padding: 0;
+}
+
+.reac__dot--active {
+  background: var(--color-primary);
+}
+
+/* ── Texto ── */
+.reac__subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.reac__text p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--color-text-soft);
+  margin-bottom: 1rem;
+}
+
+.reac__text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Texto destacado (equivalente a .highlight del original) */
+.reac__hl {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .reac__subtitle {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+  }
+}

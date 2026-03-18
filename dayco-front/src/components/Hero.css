@@ -24,6 +24,14 @@
   object-fit: cover;
 }
 
+/* Por defecto se muestra desktop, se oculta mobile */
+.hero__video--mobile { display: none; }
+
+@media (max-width: 768px) {
+  .hero__video--desktop { display: none; }
+  .hero__video--mobile  { display: block; }
+}
+
 .hero__overlay {
   position: absolute;
   inset: 0;

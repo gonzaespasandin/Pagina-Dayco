@@ -19,11 +19,15 @@
 }
 
 .navbar__logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #ffffff;
+  display: flex;
+  align-items: center;
   transition: opacity 0.2s;
+}
+
+.navbar__logo img {
+  height: 60px;
+  width: auto;
+  display: block;
 }
 
 .navbar__logo:hover {

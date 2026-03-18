@@ -210,18 +210,15 @@ function ProductoDetalle() {
               <h2>Características Principales</h2>
             </motion.div>
 
-            <motion.div
-              className="pd__bento-grid"
-              variants={stagger}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-            >
+            <div className="pd__bento-grid">
               {caracteristicas.map((c, i) => (
                 <motion.div
-                  key={i}
+                  key={`${id}-${i}`}
                   className="pd__bento-card"
-                  variants={fadeUp}
+                  initial={{ opacity: 0, y: 36 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.09 }}
                 >
                   <div className="pd__bento-card-glow" aria-hidden="true" />
                   <span className="pd__bento-num" aria-hidden="true">
@@ -239,7 +236,7 @@ function ProductoDetalle() {
                   <p className="pd__bento-desc">{c.descripcion}</p>
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
       )}
