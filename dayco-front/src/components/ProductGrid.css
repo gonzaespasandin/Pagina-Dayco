@@ -118,3 +118,23 @@
 .grid__estado--error {
   color: #e74c3c;
 }
+
+@media (max-width: 991px) {
+  .product-grid {
+    padding: 40px 0;
+  }
+
+  .product-grid__header {
+    margin-bottom: 2rem;
+  }
+
+  .product-grid__header h2 { font-size: 1.6rem; }
+}
+
+@media (max-width: 600px) {
+  .product-grid__header h2 { font-size: 1.3rem; }
+}
+
+@media (max-width: 400px) {
+  .product-grid__header h2 { font-size: 1.15rem; }
+}

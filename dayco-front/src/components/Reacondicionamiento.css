@@ -8,7 +8,7 @@
 }
 
 .reac__container {
-  max-width: 1100px;
+  max-width: 1340px;
   margin: 0 auto;
 }
 
@@ -26,7 +26,15 @@
   gap: 3.5rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
+  .reac {
+    padding: 3rem 1.5rem;
+  }
+
+  .reac__header {
+    margin-bottom: 2rem;
+  }
+
   .reac__body {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -154,7 +162,7 @@
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .reac__subtitle {
     margin-top: 0.5rem;
     font-size: 1.2rem;

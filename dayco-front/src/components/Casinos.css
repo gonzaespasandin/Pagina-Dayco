@@ -91,3 +91,23 @@
   text-align: center;
   letter-spacing: 0.01em;
 }
+
+@media (max-width: 991px) {
+  .casinos {
+    padding: 40px 0 30px;
+  }
+
+  .casinos__header {
+    margin-bottom: 2rem;
+  }
+
+  .casinos__header h2 { font-size: 1.6rem; }
+}
+
+@media (max-width: 600px) {
+  .casinos__header h2 { font-size: 1.3rem; }
+}
+
+@media (max-width: 400px) {
+  .casinos__header h2 { font-size: 1.15rem; }
+}
