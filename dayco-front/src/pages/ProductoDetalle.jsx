@@ -33,6 +33,7 @@ function ProductoDetalle() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [stats, setStats] = useState([]);
 
   useEffect(() => {
     api.get(`/productos/${id}`)
@@ -40,6 +41,12 @@ function ProductoDetalle() {
       .catch(() => setError(true))
       .finally(() => setCargando(false));
   }, [id]);
+
+  useEffect(() => {
+    api.get('/contenido')
+      .then(r => setStats(r.data))
+      .catch(() => {});
+  }, []);
 
   // Navegación del lightbox con teclado
   useEffect(() => {
@@ -95,6 +102,13 @@ function ProductoDetalle() {
         {/* Gradiente decorativo derecho (reemplaza los orbs invisibles) */}
         <div className="pd__hero-bg-accent" aria-hidden="true" />
 
+        {/* Botón volver — fuera del grid para que en mobile aparezca siempre arriba */}
+        <div className="pd__container">
+          <Link to="/#productos" className="pd__back-link">
+            <FontAwesomeIcon icon={faArrowLeft} /> Volver a productos
+          </Link>
+        </div>
+
         <div className="pd__hero-container">
           {/* Columna de texto */}
           <motion.div
@@ -103,12 +117,6 @@ function ProductoDetalle() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="pd__span_back_link">
-            <Link to="/#productos" className="pd__back-link">
-              <FontAwesomeIcon icon={faArrowLeft} /> Volver a productos
-            </Link>
-            </span>
-
             {subtitulo && <p className="pd__hero-subtitulo">{subtitulo}</p>}
             <h1 className="pd__hero-titulo">{titulo}</h1>
             {descripcion && <p className="pd__hero-descripcion">{descripcion}</p>}
@@ -158,9 +166,11 @@ function ProductoDetalle() {
       </section>
 
       {/* ── Marquee strip — rompe la monotonía del scroll ───────────────────── */}
-      {(() => {
-        const items = ['Tecnología Nacional', 'Diseño Modular', 'Servicio Online', 'Fabricación Argentina', 'Asistencia Inmediata', 'Más de 35 años'];
-        // 4 copias + animamos -50% (= 2 copias): garantiza que siempre hay contenido en pantalla
+      {/* Marquee: usa las stats de /contenido (mismas que edita el admin en "Nosotros") */}
+      {stats.length > 0 && (() => {
+        // Armamos cada ítem como "valor titulo" (ej: "35+ Años de experiencia")
+        const items = stats.map(s => `${s.valor} ${s.titulo}`);
+        // 4 copias para que el loop sea infinito sin cortes (animamos -50%)
         return (
           <div className="pd__marquee-strip" aria-hidden="true">
             <div className="pd__marquee-track">

@@ -189,12 +189,12 @@
 
   .navbar__links li a {
     font-size: 1.1rem;
-    padding: 0.7rem 0;
+    padding: 0.7rem 1rem;
   }
 
   .navbar__dropdown-btn {
     font-size: 1.1rem;
-    padding: 0.7rem 0;
+    padding: 0.7rem 1rem;
   }
 
   .navbar__dropdown {
