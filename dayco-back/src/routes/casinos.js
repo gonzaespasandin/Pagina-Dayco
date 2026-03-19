@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import db from '../config/database.js';
+import pool from '../config/database.js';
 import verificarToken from '../middleware/auth.js';
 import multer from 'multer';
 import { fileURLToPath } from 'url';
@@ -11,56 +11,57 @@ const __dirname = dirname(__filename);
 const router = Router();
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_req, _file, cb) => {
         cb(null, join(__dirname, '../../uploads'));
     },
-    filename: (req, file, cb) => {
+    filename: (_req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
 const upload = multer({ storage });
 
-router.get('/', (req, res) => {
-    const casinos = db.prepare('SELECT * FROM casinos ORDER BY orden ASC').all();
-    res.json(casinos);
+router.get('/', async (_req, res) => {
+    const [rows] = await pool.query('SELECT * FROM casinos ORDER BY orden ASC');
+    res.json(rows);
 });
 
-router.post('/', verificarToken, upload.single('logo'), (req, res) => {
+router.post('/', verificarToken, upload.single('logo'), async (req, res) => {
     const { nombre, orden } = req.body;
     const logoUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    const result = db.prepare('INSERT INTO casinos (nombre, logo_url, orden) VALUES (?, ?, ?)').run(nombre, logoUrl, orden || 0);
+    const [result] = await pool.query(
+        'INSERT INTO casinos (nombre, logo_url, orden) VALUES (?, ?, ?)',
+        [nombre, logoUrl, orden || 0]
+    );
 
-    const nuevo = db.prepare('SELECT * FROM casinos WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(nuevo);
-
+    const [rows] = await pool.query('SELECT * FROM casinos WHERE id = ?', [result.insertId]);
+    res.status(201).json(rows[0]);
 });
 
-router.put('/:id', verificarToken, upload.single('logo'), (req, res) => {
+router.put('/:id', verificarToken, upload.single('logo'), async (req, res) => {
     const { nombre, orden } = req.body;
-    const actual = db.prepare('SELECT * FROM casinos WHERE id = ?').get(req.params.id);
 
-    if (!actual) return res.status(404).json({ error: 'Casino no encontrado.' });
+    const [existing] = await pool.query('SELECT * FROM casinos WHERE id = ?', [req.params.id]);
+    if (existing.length === 0) return res.status(404).json({ error: 'Casino no encontrado.' });
 
-    const logoUrl = req.file ? `/uploads/${req.file.filename}` : actual.logo_url;
+    const logoUrl = req.file ? `/uploads/${req.file.filename}` : existing[0].logo_url;
 
-    db.prepare('UPDATE casinos SET nombre = ?, logo_url = ?, orden = ? WHERE id = ?').run(nombre, logoUrl, orden || 0, req.params.id);
+    await pool.query(
+        'UPDATE casinos SET nombre = ?, logo_url = ?, orden = ? WHERE id = ?',
+        [nombre, logoUrl, orden || 0, req.params.id]
+    );
 
-    const actualizado = db.prepare('SELECT * FROM casinos WHERE id = ?').get(req.params.id);
-
-    res.json(actualizado);
-
+    const [rows] = await pool.query('SELECT * FROM casinos WHERE id = ?', [req.params.id]);
+    res.json(rows[0]);
 });
 
-router.delete('/:id', verificarToken, (req, res) => {
-    const casino = db.prepare('SELECT * FROM casinos WHERE id = ?').get(req.params.id);
+router.delete('/:id', verificarToken, async (req, res) => {
+    const [existing] = await pool.query('SELECT * FROM casinos WHERE id = ?', [req.params.id]);
+    if (existing.length === 0) return res.status(404).json({ error: 'Casino no encontrado.' });
 
-    if (!casino) return res.status(404).json({ error: 'Casino no encontrado.' });
-
-    db.prepare('DELETE FROM casinos WHERE id = ?').run(req.params.id);
+    await pool.query('DELETE FROM casinos WHERE id = ?', [req.params.id]);
     res.json({ mensaje: 'Casino eliminado correctamente.' });
-
 });
 
 export default router;

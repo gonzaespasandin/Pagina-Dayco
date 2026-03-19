@@ -1,62 +1,15 @@
-import Database from 'better-sqlite3';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+// Creamos un "pool" de conexiones a MariaDB.
+// Un pool es como un grupo de conexiones pre-abiertas que se reutilizan,
+// en vez de abrir y cerrar una conexión nueva en cada consulta (que es lento).
+import mysql from 'mysql2/promise';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const pool = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'mi_base',
+    waitForConnections: true,
+    connectionLimit: 10,
+});
 
-const dbPath = join(__dirname, '../../database.db');
-
-const db = new Database(dbPath);
-
-db.pragma('journal_mode = WAL');
-
-const inicializarDB = () => {
-    db.exec(`
-      CREATE TABLE IF NOT EXISTS productos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titulo TEXT NOT NULL,
-        descripcion TEXT,
-        imagen_url TEXT,
-        creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS nosotros_stats (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titulo TEXT NOT NULL,
-        valor TEXT NOT NULL
-      );
-      CREATE TABLE IF NOT EXISTS casinos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT NOT NULL,
-        logo_url TEXT,
-        orden INTEGER DEFAULT 0
-      );
-    `);
-
-    // Migración: agregar columnas de detalle a productos si no existen.
-    // SQLite no soporta ALTER TABLE ADD COLUMN IF NOT EXISTS, así que usamos try/catch.
-    const columnasMigracion = [
-      'subtitulo TEXT',
-      'descripcion_larga TEXT',
-      'features_hero TEXT',     // JSON: [{icono, texto}]
-      'caracteristicas TEXT',   // JSON: [{icono, titulo, descripcion}]
-      'galeria TEXT',           // JSON: [{url, caption}]
-      'especificaciones TEXT',  // JSON: [{label, valor}]
-      'variantes TEXT',         // JSON: [{nombre, detalle}]
-      'aplicaciones TEXT',      // JSON: [{icono, nombre}]
-    ];
-
-    for (const columna of columnasMigracion) {
-      try {
-        db.exec(`ALTER TABLE productos ADD COLUMN ${columna}`);
-      } catch {
-        // La columna ya existe, se ignora el error y se continúa
-      }
-    }
-
-    console.log('Base de datos inicializada correctamente');
-  };
-
-inicializarDB();
-
-export default db;
+export default pool;
