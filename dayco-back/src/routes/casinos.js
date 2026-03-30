@@ -1,25 +1,9 @@
 import { Router } from 'express';
 import pool from '../config/database.js';
 import verificarToken from '../middleware/auth.js';
-import multer from 'multer';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import upload from '../middleware/upload.js';
 
 const router = Router();
-
-const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => {
-        cb(null, join(__dirname, '../../uploads'));
-    },
-    filename: (_req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
-
-const upload = multer({ storage });
 
 router.get('/', async (_req, res) => {
     const [rows] = await pool.query('SELECT * FROM casinos ORDER BY orden ASC');

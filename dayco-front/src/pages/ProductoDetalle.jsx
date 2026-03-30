@@ -117,26 +117,28 @@ function ProductoDetalle() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
-            {subtitulo && <p className="pd__hero-subtitulo">{subtitulo}</p>}
-            <h1 className="pd__hero-titulo">{titulo}</h1>
-            {descripcion && <p className="pd__hero-descripcion">{descripcion}</p>}
+            <div className="pd__hero-text-content">
+              {subtitulo && <p className="pd__hero-subtitulo">{subtitulo}</p>}
+              <h1 className="pd__hero-titulo">{titulo}</h1>
+              {descripcion && <p className="pd__hero-descripcion">{descripcion}</p>}
 
-            {/* Badges del hero */}
-            {features_hero?.length > 0 && (
-              <motion.div
-                className="pd__hero-badges"
-                variants={stagger}
-                initial="hidden"
-                animate="visible"
-              >
-                {features_hero.map((f, i) => (
-                  <motion.span key={i} className="pd__hero-badge" variants={fadeUp}>
-                    {f.icono && <Icono nombre={f.icono} />}
-                    {f.texto}
-                  </motion.span>
-                ))}
-              </motion.div>
-            )}
+              {/* Badges del hero */}
+              {features_hero?.length > 0 && (
+                <motion.div
+                  className="pd__hero-badges"
+                  variants={stagger}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {features_hero.map((f, i) => (
+                    <motion.span key={i} className="pd__hero-badge" variants={fadeUp}>
+                      {f.icono && <Icono nombre={f.icono} />}
+                      {f.texto}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              )}
+            </div>
 
             <a href="/#contacto" className="pd__hero-cta">
               <FontAwesomeIcon icon={faEnvelope} />

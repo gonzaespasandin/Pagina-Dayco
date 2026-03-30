@@ -1,29 +1,10 @@
 import { Router } from 'express';
 import pool from '../config/database.js';
 import verificarToken from '../middleware/auth.js';
-import multer from 'multer';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import upload from '../middleware/upload.js';
 
 const router = Router();
 
-const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => {
-        cb(null, join(__dirname, '../../uploads'));
-    },
-    filename: (_req, file, cb) => {
-        const nombreUnico = `${Date.now()}-${file.originalname}`;
-        cb(null, nombreUnico);
-    }
-});
-
-const upload = multer({ storage });
-
-// Helper: mysql2 devuelve columnas JSON ya parseadas como objetos JS.
-// Para columnas que lleguen como string (por compatibilidad), las parseamos igual.
 const parsearProducto = (p) => {
     if (!p) return null;
     const camposJSON = ['features_hero', 'caracteristicas', 'galeria', 'especificaciones', 'variantes', 'aplicaciones'];
@@ -35,7 +16,6 @@ const parsearProducto = (p) => {
             } else if (typeof resultado[campo] === 'string') {
                 resultado[campo] = JSON.parse(resultado[campo]);
             }
-            // Si ya es objeto/array (mysql2 parsea JSON automáticamente), se deja como está
         } catch {
             resultado[campo] = [];
         }
@@ -43,7 +23,6 @@ const parsearProducto = (p) => {
     return resultado;
 };
 
-// IMPORTANTE: esta ruta va ANTES de /:id para que Express no la interprete como un id.
 router.post('/upload-imagen', verificarToken, upload.single('imagen'), (_req, res) => {
     if (!_req.file) {
         return res.status(400).json({ error: 'No se recibió ninguna imagen.' });
@@ -51,7 +30,6 @@ router.post('/upload-imagen', verificarToken, upload.single('imagen'), (_req, re
     res.json({ url: `/uploads/${_req.file.filename}` });
 });
 
-// pool.query() devuelve [rows, fields]. Desestructuramos solo rows con [rows].
 router.get('/', async (_req, res) => {
     const [rows] = await pool.query('SELECT * FROM productos');
     res.json(rows.map(parsearProducto));
@@ -74,7 +52,6 @@ router.post('/', verificarToken, upload.single('imagen'), async (req, res) => {
 
     const imagenUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // result.insertId es el equivalente de lastInsertRowid en SQLite
     const [result] = await pool.query(`
         INSERT INTO productos
           (titulo, descripcion, imagen_url, subtitulo, descripcion_larga,
