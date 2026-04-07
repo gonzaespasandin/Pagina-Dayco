@@ -60,7 +60,7 @@ function ProductGrid() {
               <div className="product-card__imagen">
                 <img
                   src={producto.imagen_url
-                    ? `http://localhost:3001${producto.imagen_url}`
+                    ? `${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${producto.imagen_url}`
                     : '/fallback.png'}
                   alt={producto.titulo}
                 />

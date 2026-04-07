@@ -6,7 +6,7 @@
 .product-grid__header {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 0 5%;
+  padding: 0 1.5rem;
 }
 
 .product-grid__header h2 {
@@ -22,7 +22,7 @@
   gap: 2rem;
   max-width: 1340px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 1.5rem;
 }
 
 .product-card {
@@ -129,6 +129,12 @@
   }
 
   .product-grid__header h2 { font-size: 1.6rem; }
+}
+
+@media (max-width: 767px) {
+  .product-grid__items {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {

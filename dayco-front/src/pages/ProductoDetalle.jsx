@@ -91,7 +91,7 @@ function ProductoDetalle() {
     galeria, especificaciones, variantes, aplicaciones,
   } = producto;
 
-  const imgBase = 'http://localhost:3001';
+  const imgBase = import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000';
 
   return (
     <>

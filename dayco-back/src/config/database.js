@@ -1,6 +1,3 @@
-// Creamos un "pool" de conexiones a MariaDB.
-// Un pool es como un grupo de conexiones pre-abiertas que se reutilizan,
-// en vez de abrir y cerrar una conexión nueva en cada consulta (que es lento).
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({

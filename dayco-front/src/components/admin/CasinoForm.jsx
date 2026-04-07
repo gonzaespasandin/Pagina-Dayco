@@ -16,7 +16,7 @@ function CasinoForm({ casino, onGuardado, onCancelar }) {
     if (casino) {
       setNombre(casino.nombre);
       setOrden(casino.orden ?? 0);
-      setPreview(casino.logo_url ? `http://localhost:3001${casino.logo_url}` : null);
+      setPreview(casino.logo_url ? `${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${casino.logo_url}` : null);
     }
   }, [casino]);
 

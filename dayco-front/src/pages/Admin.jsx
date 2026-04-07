@@ -147,7 +147,7 @@ function Admin() {
                   <div key={p.id} className="admin__tabla-fila">
                     <div className="admin__tabla-img">
                       {p.imagen_url
-                        ? <img src={`http://localhost:3001${p.imagen_url}`} alt={p.titulo} />
+                        ? <img src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${p.imagen_url}`} alt={p.titulo} />
                         : <span className="admin__no-img">Sin imagen</span>
                       }
                     </div>
@@ -238,7 +238,7 @@ function Admin() {
                   <div key={c.id} className="admin__tabla-fila admin__tabla-fila--casinos">
                     <div className="admin__tabla-img">
                       {c.logo_url
-                        ? <img src={`http://localhost:3001${c.logo_url}`} alt={c.nombre} />
+                        ? <img src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${c.logo_url}`} alt={c.nombre} />
                         : <span className="admin__no-img">Sin logo</span>
                       }
                     </div>

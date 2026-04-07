@@ -3,8 +3,8 @@
 :root {
   --color-primary: #9c3ce9;
   --color-secondary: #633beb;
-  --gradient: linear-gradient(135deg, #9c3ce9 0%, #633beb 100%);
-  --gradient-h: linear-gradient(135deg, #b04fff 0%, #7b52f5 100%);
+  --gradient: linear-gradient(180deg, #9c3ce9 0%, #633beb 100%);
+  --gradient-invert: linear-gradient(180deg, #633beb 0%, #9c3ce9 100%);
 
   --color-text: #222833;
   --color-text-soft: #595959;
@@ -35,12 +35,13 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  background-color: var(--color-primary);;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background-color: var(--color-primary);;
   line-height: 1.6;
   overflow-x: hidden;
 }

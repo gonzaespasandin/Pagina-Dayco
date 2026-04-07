@@ -33,7 +33,7 @@ function Casinos() {
                   <div key={index} className="casinos__item">
                     {casino.logo_url ? (
                       <img
-                        src={`http://localhost:3001${casino.logo_url}`}
+                        src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${casino.logo_url}`}
                         alt={casino.nombre}
                       />
                     ) : (

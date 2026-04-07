@@ -52,7 +52,7 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
       setSubtitulo(producto.subtitulo || '');
       setDescripcion(producto.descripcion || '');
       setDescripcionLarga(producto.descripcion_larga || '');
-      setPreview(producto.imagen_url ? `http://localhost:3001${producto.imagen_url}` : null);
+      setPreview(producto.imagen_url ? `${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${producto.imagen_url}` : null);
       setFeaturesHero(Array.isArray(producto.features_hero) ? producto.features_hero : []);
       setCaracteristicas(Array.isArray(producto.caracteristicas) ? producto.caracteristicas : []);
       setGaleria(Array.isArray(producto.galeria) ? producto.galeria : []);
@@ -367,7 +367,7 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                     <span className="pform__galeria-drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setGaleria, i)}>✕</button>
                     <div className="pform__galeria-preview">
-                      <img src={`http://localhost:3001${item.url}`} alt={`Galería ${i + 1}`} />
+                      <img src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${item.url}`} alt={`Galería ${i + 1}`} />
                       <label className="pform__galeria-edit-overlay" title="Cambiar imagen">
                         {reemplazandoIndex === i ? (
                           <span className="pform__galeria-edit-text">Subiendo...</span>

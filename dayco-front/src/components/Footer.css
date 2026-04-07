@@ -1,5 +1,5 @@
 .footer {
-  background: var(--gradient);
+  background: var(--gradient-invert);
   color: var(--color-white);
   padding: 2.5rem 5%;
   text-align: center;

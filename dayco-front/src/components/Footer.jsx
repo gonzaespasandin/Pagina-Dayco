@@ -13,6 +13,7 @@ function Footer() {
             <a href="/#productos">Productos</a>
             <a href="/#nosotros">Nosotros</a>
             <a href="/#contacto">Contacto</a>
+            <a href="/admin">Admin</a>
           </div>
         </div>
         <div className="footer__bottom">
