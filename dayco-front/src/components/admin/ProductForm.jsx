@@ -32,6 +32,9 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
   // Tab 2: Galería
   const [galeria, setGaleria] = useState([]);                 // [{url, caption}]
   const [uploadandoGaleria, setUploadandoGaleria] = useState(false);
+  const [reemplazandoIndex, setReemplazandoIndex] = useState(null);
+  const [dragIndex, setDragIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
 
   // Tab 3: Specs
   const [especificaciones, setEspecificaciones] = useState([]); // [{label, valor}]
@@ -89,6 +92,43 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
       setUploadandoGaleria(false);
       e.target.value = '';
     }
+  };
+
+  const handleReemplazarImagenGaleria = async (e, index) => {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+    setReemplazandoIndex(index);
+    setError('');
+    try {
+      const fd = new FormData();
+      fd.append('imagen', archivo);
+      const resp = await api.post('/productos/upload-imagen', fd);
+      setGaleria(prev => prev.map((item, i) => i === index ? { ...item, url: resp.data.url } : item));
+    } catch {
+      setError('Error al reemplazar imagen. Intentá de nuevo.');
+    } finally {
+      setReemplazandoIndex(null);
+      e.target.value = '';
+    }
+  };
+
+  const handleDragStart = (i) => setDragIndex(i);
+  const handleDragOver = (e, i) => {
+    e.preventDefault();
+    if (dragOverIndex !== i) setDragOverIndex(i);
+  };
+  const handleDrop = (i) => {
+    if (dragIndex === null || dragIndex === i) return;
+    const nueva = [...galeria];
+    const [item] = nueva.splice(dragIndex, 1);
+    nueva.splice(i, 0, item);
+    setGaleria(nueva);
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
+  const handleDragEnd = () => {
+    setDragIndex(null);
+    setDragOverIndex(null);
   };
 
   const handleSubmit = async (e) => {
@@ -311,10 +351,40 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {galeria.map((item, i) => (
-                  <div key={i} className="pform__array-item pform__array-item--galeria">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--galeria',
+                      dragIndex === i ? 'pform__array-item--dragging' : '',
+                      dragOverIndex === i && dragIndex !== i ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => handleDragStart(i)}
+                    onDragOver={(e) => handleDragOver(e, i)}
+                    onDrop={() => handleDrop(i)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <span className="pform__galeria-drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setGaleria, i)}>✕</button>
                     <div className="pform__galeria-preview">
                       <img src={`http://localhost:3001${item.url}`} alt={`Galería ${i + 1}`} />
+                      <label className="pform__galeria-edit-overlay" title="Cambiar imagen">
+                        {reemplazandoIndex === i ? (
+                          <span className="pform__galeria-edit-text">Subiendo...</span>
+                        ) : (
+                          <>
+                            <span className="pform__galeria-edit-icon">✏</span>
+                            <span className="pform__galeria-edit-text">Cambiar</span>
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleReemplazarImagenGaleria(e, i)}
+                          style={{ display: 'none' }}
+                          disabled={reemplazandoIndex !== null}
+                        />
+                      </label>
                     </div>
                     <div className="pform__field">
                       <label>Caption (opcional)</label>
