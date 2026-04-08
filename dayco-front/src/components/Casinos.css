@@ -25,6 +25,17 @@
   margin-bottom: 0;
 }
 
+.casinos__tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* En desktop/tablet: ocultar la segunda fila */
+.casinos__track-wrapper:nth-child(2) {
+  display: none;
+}
+
 .casinos__track-wrapper {
   overflow: hidden;
   width: 100%;
@@ -51,9 +62,18 @@
   width: max-content;
 }
 
+.casinos__track--rtl {
+  animation: scroll-infinito-rtl 22s linear infinite;
+}
+
 @keyframes scroll-infinito {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+@keyframes scroll-infinito-rtl {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
 
 .casinos__item {
@@ -106,8 +126,49 @@
 
 @media (max-width: 600px) {
   .casinos__header h2 { font-size: 1.3rem; }
+
+  /* Activar segunda fila en mobile */
+  .casinos__track-wrapper:nth-child(2) {
+    display: block;
+  }
+
+  .casinos__tracks {
+    gap: 0.7rem;
+  }
+
+  .casinos__track {
+    gap: 0.7rem;
+    animation-duration: 20s;
+  }
+
+  .casinos__track--rtl {
+    animation-duration: 22s;
+  }
+
+  .casinos__item {
+    min-width: 130px;
+    height: 90px;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0;
+  }
+
+  .casinos__item img {
+    max-width: 110px;
+    max-height: 70px;
+  }
 }
 
 @media (max-width: 400px) {
   .casinos__header h2 { font-size: 1.15rem; }
+
+  .casinos__item {
+    min-width: 110px;
+    height: 78px;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .casinos__item img {
+    max-width: 90px;
+    max-height: 58px;
+  }
 }

@@ -27,21 +27,25 @@ function Casinos() {
               <h2>Casinos que confían en nosotros</h2>
               <div className="divider" />
             </motion.div>
-            <div className="casinos__track-wrapper">
-              <div className="casinos__track">
-                {[...casinos, ...casinos].map((casino, index) => (
-                  <div key={index} className="casinos__item">
-                    {casino.logo_url ? (
-                      <img
-                        src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${casino.logo_url}`}
-                        alt={casino.nombre}
-                      />
-                    ) : (
-                      <span className="casinos__nombre">{casino.nombre}</span>
-                    )}
+            <div className="casinos__tracks">
+              {[false, true].map((reverso) => (
+                <div key={reverso} className="casinos__track-wrapper">
+                  <div className={`casinos__track ${reverso ? 'casinos__track--rtl' : ''}`}>
+                    {[...casinos, ...casinos].map((casino, index) => (
+                      <div key={index} className="casinos__item">
+                        {casino.logo_url ? (
+                          <img
+                            src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${casino.logo_url}`}
+                            alt={casino.nombre}
+                          />
+                        ) : (
+                          <span className="casinos__nombre">{casino.nombre}</span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

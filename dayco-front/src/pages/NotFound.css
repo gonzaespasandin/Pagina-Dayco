@@ -1,0 +1,203 @@
+/* ══════════════════════════════════════════════════════════════════
+   NotFound.css — 404 page, dark theme con acentos violeta
+══════════════════════════════════════════════════════════════════ */
+
+.nf {
+  position: relative;
+  min-height: 100vh;
+  background: var(--dark-deep);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Fondo decorativo ───────────────────────────────────────────── */
+.nf__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Grilla de puntos sutil */
+.nf__bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(156, 60, 233, 0.18) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Resplandores de fondo */
+.nf__bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: nf-pulse 6s ease-in-out infinite alternate;
+}
+
+.nf__bg-glow--1 {
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(156, 60, 233, 0.22) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.nf__bg-glow--2 {
+  width: 400px;
+  height: 400px;
+  bottom: 0;
+  right: -5%;
+  background: radial-gradient(circle, rgba(99, 59, 235, 0.16) 0%, transparent 70%);
+  animation-delay: 3s;
+}
+
+@keyframes nf-pulse {
+  from { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  to   { opacity: 1;   transform: translateX(-50%) scale(1.12); }
+}
+
+.nf__bg-glow--2 {
+  animation: nf-pulse-2 6s ease-in-out infinite alternate;
+}
+@keyframes nf-pulse-2 {
+  from { opacity: 0.5; transform: scale(1); }
+  to   { opacity: 0.9; transform: scale(1.15); }
+}
+
+/* ── Contenido principal ────────────────────────────────────────── */
+.nf__main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 2rem 4rem;
+  text-align: center;
+}
+
+/* ── Número 404 ─────────────────────────────────────────────────── */
+.nf__number-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.nf__number {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(7rem, 22vw, 14rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+
+  /* Relleno con gradiente */
+  background: linear-gradient(135deg, #b060f5 0%, #9c3ce9 40%, #633beb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Brillo exterior */
+  filter: drop-shadow(0 0 40px rgba(156, 60, 233, 0.5))
+          drop-shadow(0 0 80px rgba(156, 60, 233, 0.25));
+}
+
+/* Línea divisoria animada bajo el 404 */
+.nf__number-line {
+  height: 3px;
+  background: var(--gradient);
+  border-radius: 2px;
+  transform-origin: left center;
+  margin-top: -0.4rem;
+  box-shadow: 0 0 12px rgba(156, 60, 233, 0.6);
+}
+
+/* ── Texto ──────────────────────────────────────────────────────── */
+.nf__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 520px;
+}
+
+.nf__title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--color-white);
+  letter-spacing: -0.02em;
+}
+
+.nf__description {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.7;
+}
+
+/* ── Botones ────────────────────────────────────────────────────── */
+.nf__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nf__btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  text-decoration: none;
+}
+
+.nf__btn--primary {
+  background: var(--gradient);
+  color: var(--color-white);
+  box-shadow: 0 5px 20px rgba(156, 60, 233, 0.45);
+}
+
+.nf__btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(156, 60, 233, 0.65);
+}
+
+.nf__btn--ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(156, 60, 233, 0.35);
+}
+
+.nf__btn--ghost:hover {
+  border-color: rgba(156, 60, 233, 0.7);
+  color: var(--color-white);
+  background: rgba(156, 60, 233, 0.08);
+  transform: translateY(-3px);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .nf__main {
+    padding: 90px 1.5rem 3rem;
+  }
+
+  .nf__description {
+    font-size: 0.9rem;
+  }
+
+  .nf__btn {
+    padding: 0.75rem 1.6rem;
+    font-size: 0.875rem;
+  }
+}

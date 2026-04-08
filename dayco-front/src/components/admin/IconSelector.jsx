@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as fas from '@fortawesome/free-solid-svg-icons';
 import {
   faStar, faBuilding, faIndustry, faTrophy, faShield, faGear,
   faChartLine, faUsers, faHandshake, faAward, faRocket, faGlobe,
@@ -17,6 +18,22 @@ import {
   faBox, faCertificate, faExpand, faSliders, faTableCells
 } from '@fortawesome/free-solid-svg-icons';
 import './IconSelector.css';
+
+function dashedToFaCamel(raw) {
+  let s = raw.trim().replace(/\bfa-(solid|regular|brands|light|thin|duotone)\b/gi, '').trim();
+  if (/^fa[A-Z]/.test(s)) return s; // ya está en camelCase
+  s = s.replace(/^fa-/, '');
+  const camel = s.split('-').filter(Boolean)
+    .map((w, i) => i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1))
+    .join('');
+  return 'fa' + camel.charAt(0).toUpperCase() + camel.slice(1);
+}
+
+function resolveIcon(camelKey) {
+  if (!camelKey) return null;
+  const def = fas[camelKey];
+  return def && Array.isArray(def.icon) ? def : null;
+}
 
 const ICONOS_DISPONIBLES = [
   { nombre: 'faStar',              icono: faStar },
@@ -91,8 +108,9 @@ const ICONOS_DISPONIBLES = [
 function IconSelector({ value, onChange }) {
   const [busqueda, setBusqueda] = useState('');
   const [abierto, setAbierto] = useState(false);
+  const [inputPersonalizado, setInputPersonalizado] = useState('');
 
-  const iconoActual = ICONOS_DISPONIBLES.find(i => i.nombre === value);
+  const iconoActualDef = value ? resolveIcon(value) : null;
 
   const filtrados = busqueda.trim()
     ? ICONOS_DISPONIBLES.filter(i =>
@@ -100,10 +118,14 @@ function IconSelector({ value, onChange }) {
       )
     : ICONOS_DISPONIBLES;
 
+  const camelPersonalizado = inputPersonalizado.trim() ? dashedToFaCamel(inputPersonalizado) : '';
+  const iconoPersonalizado = camelPersonalizado ? resolveIcon(camelPersonalizado) : null;
+
   const seleccionar = (nombre) => {
     onChange(nombre);
     setAbierto(false);
     setBusqueda('');
+    setInputPersonalizado('');
   };
 
   return (
@@ -113,8 +135,8 @@ function IconSelector({ value, onChange }) {
         className="isel__trigger"
         onClick={() => setAbierto(!abierto)}
       >
-        {iconoActual
-          ? <><FontAwesomeIcon icon={iconoActual.icono} className="isel__trigger-icon" /> {value}</>
+        {iconoActualDef
+          ? <><FontAwesomeIcon icon={iconoActualDef} className="isel__trigger-icon" /> {value}</>
           : <span className="isel__placeholder">Elegir ícono...</span>
         }
         <span className="isel__arrow">{abierto ? '▲' : '▼'}</span>
@@ -122,13 +144,49 @@ function IconSelector({ value, onChange }) {
 
       {abierto && (
         <div className="isel__panel">
+          <div className="isel__custom-wrap">
+            <div className="isel__custom-row">
+              <input
+                type="text"
+                className="isel__custom-input"
+                placeholder="Ej: fa-dice  o  fa-solid fa-dice"
+                value={inputPersonalizado}
+                onChange={(e) => setInputPersonalizado(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && iconoPersonalizado) {
+                    seleccionar(camelPersonalizado);
+                  }
+                }}
+                autoFocus
+              />
+              {inputPersonalizado.trim() && (
+                iconoPersonalizado
+                  ? <span className="isel__custom-preview"><FontAwesomeIcon icon={iconoPersonalizado} /></span>
+                  : <span className="isel__custom-preview isel__custom-preview--error">?</span>
+              )}
+              <button
+                type="button"
+                className="isel__custom-confirm"
+                disabled={!iconoPersonalizado}
+                onClick={() => seleccionar(camelPersonalizado)}
+              >
+                Usar
+              </button>
+            </div>
+            {inputPersonalizado.trim() && !iconoPersonalizado && (
+              <p className="isel__custom-hint">Ícono no encontrado. Verificá el nombre en fontawesome.com/icons</p>
+            )}
+            {iconoPersonalizado && (
+              <p className="isel__custom-hint isel__custom-hint--ok">{camelPersonalizado}</p>
+            )}
+          </div>
+
           <div className="isel__search-wrap">
             <input
               type="text"
-              placeholder="Buscar ícono (ej: star, trophy...)"
+              placeholder="Buscar en favoritos (ej: star, trophy...)"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              autoFocus
             />
           </div>
           <div className="isel__grid">

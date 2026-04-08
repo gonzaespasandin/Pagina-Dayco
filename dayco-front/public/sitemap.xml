@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Inicio -->
+  <url>
+    <loc>https://TU-DOMINIO.com/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- ─── Páginas de productos ────────────────────────────────────────────
+       Reemplazá cada <loc> con el ID real de cada producto en tu base de datos.
+       Podés ver los IDs desde el panel admin o consultando GET /api/productos
+  ─────────────────────────────────────────────────────────────────────── -->
+
+  <!-- <url>
+    <loc>https://TU-DOMINIO.com/productos/1</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url> -->
+
+</urlset>

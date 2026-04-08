@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEnvelope, faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ICONOS_DISPONIBLES } from '../components/admin/IconSelector';
+import * as fas from '@fortawesome/free-solid-svg-icons';
 import api from '../api/axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -11,9 +11,10 @@ import './ProductoDetalle.css';
 
 // Helper: dado el nombre de un ícono (ej: "faTv"), devuelve el componente FA correspondiente.
 function Icono({ nombre, className }) {
-  const encontrado = ICONOS_DISPONIBLES.find(i => i.nombre === nombre);
-  if (!encontrado) return null;
-  return <FontAwesomeIcon icon={encontrado.icono} className={className} />;
+  if (!nombre) return null;
+  const iconDef = fas[nombre];
+  if (!iconDef || !Array.isArray(iconDef.icon)) return null;
+  return <FontAwesomeIcon icon={iconDef} className={className} />;
 }
 
 // ── Animaciones reutilizables ────────────────────────────────────────────────
@@ -29,16 +30,16 @@ const stagger = {
 
 function ProductoDetalle() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [producto, setProducto] = useState(null);
   const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
     api.get(`/productos/${id}`)
       .then(r => setProducto(r.data))
-      .catch(() => setError(true))
+      .catch(() => navigate('/404', { replace: true }))
       .finally(() => setCargando(false));
   }, [id]);
 
@@ -75,15 +76,10 @@ function ProductoDetalle() {
     </>
   );
 
-  if (error || !producto) return (
-    <>
-      <Navbar />
-      <div className="pd__error">
-        <p>No encontramos este producto.</p>
-        <Link to="/" className="pd__back-link"><FontAwesomeIcon icon={faArrowLeft} /> Volver al inicio</Link>
-      </div>
-    </>
-  );
+  if (!cargando && !producto) {
+    navigate('/404', { replace: true });
+    return null;
+  }
 
   const {
     titulo, subtitulo, descripcion, descripcion_larga,

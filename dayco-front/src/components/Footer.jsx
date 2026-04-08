@@ -18,6 +18,7 @@ function Footer() {
         </div>
         <div className="footer__bottom">
           <p>© {new Date().getFullYear()} Dayco Gaming. Todos los derechos reservados.</p>
+          <p>Desarrollado por <a href="https://www.linkedin.com/in/espasandin-gonzalo/" target="_blank" rel="noopener noreferrer">Gonzalo Espasandin</a></p>
         </div>
       </footer>
     );

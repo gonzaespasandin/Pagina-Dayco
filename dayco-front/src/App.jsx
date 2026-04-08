@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import ProductoDetalle from './pages/ProductoDetalle';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/productos/:id" element={<ProductoDetalle />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
