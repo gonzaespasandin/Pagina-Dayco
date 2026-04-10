@@ -284,7 +284,7 @@ function ProductoDetalle() {
                       <span className="pd__variante-nombre">{v.nombre}</span>
                       {v.detalle && <p className="pd__variante-detalle-texto">{v.detalle}</p>}
                     </div>
-                    <FontAwesomeIcon icon={faChevronRight} className="pd__variante-chevron" aria-hidden="true" />
+                    
                   </div>
                 </motion.div>
               ))}

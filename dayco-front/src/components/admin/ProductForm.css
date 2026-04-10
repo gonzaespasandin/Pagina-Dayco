@@ -225,6 +225,16 @@
   margin-bottom: 0;
 }
 
+/* Item draggable (todos los arrays con reorden) */
+.pform__array-item--draggable {
+  padding-left: 1.75rem;
+  cursor: grab;
+}
+
+.pform__array-item--draggable:active {
+  cursor: grabbing;
+}
+
 /* Item con preview de imagen (galería) */
 .pform__array-item--galeria {
   display: grid;
@@ -232,12 +242,6 @@
   grid-template-rows: auto auto;
   gap: 0.75rem;
   align-items: start;
-  padding-left: 1.75rem;
-  cursor: grab;
-}
-
-.pform__array-item--galeria:active {
-  cursor: grabbing;
 }
 
 .pform__array-item--galeria .pform__array-delete {
@@ -256,8 +260,8 @@
   background: rgba(156, 60, 233, 0.04);
 }
 
-/* Drag handle */
-.pform__galeria-drag-handle {
+/* Drag handle (genérico para todos los arrays) */
+.pform__drag-handle {
   position: absolute;
   top: 50%;
   left: 0.45rem;
@@ -271,7 +275,7 @@
   transition: color 0.2s;
 }
 
-.pform__galeria-drag-handle:hover {
+.pform__drag-handle:hover {
   color: #94a3b8;
 }
 

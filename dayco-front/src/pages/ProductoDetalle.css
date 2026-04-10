@@ -476,7 +476,6 @@
   border-radius: var(--pd-radius-sm);
   padding: 1.4rem 1.75rem;
   text-align: left;
-  cursor: pointer;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;

@@ -33,8 +33,7 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
   const [galeria, setGaleria] = useState([]);                 // [{url, caption}]
   const [uploadandoGaleria, setUploadandoGaleria] = useState(false);
   const [reemplazandoIndex, setReemplazandoIndex] = useState(null);
-  const [dragIndex, setDragIndex] = useState(null);
-  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [dragState, setDragState] = useState({ section: null, from: null, over: null });
 
   // Tab 3: Specs
   const [especificaciones, setEspecificaciones] = useState([]); // [{label, valor}]
@@ -112,24 +111,32 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
     }
   };
 
-  const handleDragStart = (i) => setDragIndex(i);
-  const handleDragOver = (e, i) => {
-    e.preventDefault();
-    if (dragOverIndex !== i) setDragOverIndex(i);
-  };
-  const handleDrop = (i) => {
-    if (dragIndex === null || dragIndex === i) return;
-    const nueva = [...galeria];
-    const [item] = nueva.splice(dragIndex, 1);
-    nueva.splice(i, 0, item);
-    setGaleria(nueva);
-    setDragIndex(null);
-    setDragOverIndex(null);
-  };
-  const handleDragEnd = () => {
-    setDragIndex(null);
-    setDragOverIndex(null);
-  };
+  const makeDragHandlers = (section, array, setter) => ({
+    onDragStart: (i) => setDragState({ section, from: i, over: null }),
+    onDragOver: (e, i) => {
+      e.preventDefault();
+      setDragState(s => s.over === i ? s : { ...s, over: i });
+    },
+    onDrop: (i) => {
+      const { from } = dragState;
+      if (from === null || from === i) return;
+      const next = [...array];
+      const [item] = next.splice(from, 1);
+      next.splice(i, 0, item);
+      setter(next);
+      setDragState({ section: null, from: null, over: null });
+    },
+    onDragEnd: () => setDragState({ section: null, from: null, over: null }),
+    isDragging: (i) => dragState.section === section && dragState.from === i,
+    isDragOver: (i) => dragState.section === section && dragState.over === i && dragState.from !== i,
+  });
+
+  const dragGaleria       = makeDragHandlers('galeria',         galeria,         setGaleria);
+  const dragFeaturesHero  = makeDragHandlers('featuresHero',    featuresHero,    setFeaturesHero);
+  const dragCaracteristic = makeDragHandlers('caracteristicas', caracteristicas, setCaracteristicas);
+  const dragEspec         = makeDragHandlers('especificaciones', especificaciones, setEspecificaciones);
+  const dragVariantes     = makeDragHandlers('variantes',       variantes,       setVariantes);
+  const dragAplicaciones  = makeDragHandlers('aplicaciones',    aplicaciones,    setAplicaciones);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -279,7 +286,20 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {featuresHero.map((item, i) => (
-                  <div key={i} className="pform__array-item">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--draggable',
+                      dragFeaturesHero.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragFeaturesHero.isDragOver(i) ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => dragFeaturesHero.onDragStart(i)}
+                    onDragOver={(e) => dragFeaturesHero.onDragOver(e, i)}
+                    onDrop={() => dragFeaturesHero.onDrop(i)}
+                    onDragEnd={dragFeaturesHero.onDragEnd}
+                  >
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setFeaturesHero, i)}>✕</button>
                     <div className="pform__field">
                       <label>Ícono</label>
@@ -309,7 +329,20 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {caracteristicas.map((item, i) => (
-                  <div key={i} className="pform__array-item">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--draggable',
+                      dragCaracteristic.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragCaracteristic.isDragOver(i) ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => dragCaracteristic.onDragStart(i)}
+                    onDragOver={(e) => dragCaracteristic.onDragOver(e, i)}
+                    onDrop={() => dragCaracteristic.onDrop(i)}
+                    onDragEnd={dragCaracteristic.onDragEnd}
+                  >
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setCaracteristicas, i)}>✕</button>
                     <div className="pform__field">
                       <label>Ícono</label>
@@ -354,17 +387,17 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                   <div
                     key={i}
                     className={[
-                      'pform__array-item pform__array-item--galeria',
-                      dragIndex === i ? 'pform__array-item--dragging' : '',
-                      dragOverIndex === i && dragIndex !== i ? 'pform__array-item--drag-over' : '',
+                      'pform__array-item pform__array-item--galeria pform__array-item--draggable',
+                      dragGaleria.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragGaleria.isDragOver(i) ? 'pform__array-item--drag-over' : '',
                     ].join(' ')}
                     draggable
-                    onDragStart={() => handleDragStart(i)}
-                    onDragOver={(e) => handleDragOver(e, i)}
-                    onDrop={() => handleDrop(i)}
-                    onDragEnd={handleDragEnd}
+                    onDragStart={() => dragGaleria.onDragStart(i)}
+                    onDragOver={(e) => dragGaleria.onDragOver(e, i)}
+                    onDrop={() => dragGaleria.onDrop(i)}
+                    onDragEnd={dragGaleria.onDragEnd}
                   >
-                    <span className="pform__galeria-drag-handle" title="Arrastrar para reordenar">⠿</span>
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setGaleria, i)}>✕</button>
                     <div className="pform__galeria-preview">
                       <img src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${item.url}`} alt={`Galería ${i + 1}`} />
@@ -420,7 +453,20 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {especificaciones.map((item, i) => (
-                  <div key={i} className="pform__array-item pform__array-item--row">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--row pform__array-item--draggable',
+                      dragEspec.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragEspec.isDragOver(i) ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => dragEspec.onDragStart(i)}
+                    onDragOver={(e) => dragEspec.onDragOver(e, i)}
+                    onDrop={() => dragEspec.onDrop(i)}
+                    onDragEnd={dragEspec.onDragEnd}
+                  >
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <div className="pform__field">
                       <label>Característica</label>
                       <input
@@ -455,7 +501,20 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {variantes.map((item, i) => (
-                  <div key={i} className="pform__array-item pform__array-item--row">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--row pform__array-item--draggable',
+                      dragVariantes.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragVariantes.isDragOver(i) ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => dragVariantes.onDragStart(i)}
+                    onDragOver={(e) => dragVariantes.onDragOver(e, i)}
+                    onDrop={() => dragVariantes.onDrop(i)}
+                    onDragEnd={dragVariantes.onDragEnd}
+                  >
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <div className="pform__field">
                       <label>Nombre</label>
                       <input
@@ -490,7 +549,20 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
                 </p>
 
                 {aplicaciones.map((item, i) => (
-                  <div key={i} className="pform__array-item">
+                  <div
+                    key={i}
+                    className={[
+                      'pform__array-item pform__array-item--draggable',
+                      dragAplicaciones.isDragging(i) ? 'pform__array-item--dragging' : '',
+                      dragAplicaciones.isDragOver(i) ? 'pform__array-item--drag-over' : '',
+                    ].join(' ')}
+                    draggable
+                    onDragStart={() => dragAplicaciones.onDragStart(i)}
+                    onDragOver={(e) => dragAplicaciones.onDragOver(e, i)}
+                    onDrop={() => dragAplicaciones.onDrop(i)}
+                    onDragEnd={dragAplicaciones.onDragEnd}
+                  >
+                    <span className="pform__drag-handle" title="Arrastrar para reordenar">⠿</span>
                     <button type="button" className="pform__array-delete" onClick={() => eliminarItem(setAplicaciones, i)}>✕</button>
                     <div className="pform__field">
                       <label>Ícono</label>
