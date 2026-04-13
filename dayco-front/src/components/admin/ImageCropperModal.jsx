@@ -89,7 +89,7 @@ function ImageCropperModal({ imageSrc, aspecto, aspectos, onConfirmar, onCancela
 
         <div className="crop-modal__header">
           <h3>{titulo || 'Recortar imagen'}</h3>
-          <button className="crop-modal__close" onClick={onCancelar}>✕</button>
+          <button className="crop-modal__close" onClick={onCancelar} aria-label="Cerrar">✕</button>
         </div>
 
         {/* Toggles de ratio — solo se muestran si se pasan múltiples opciones */}

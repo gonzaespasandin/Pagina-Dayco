@@ -49,6 +49,15 @@ function ProductoDetalle() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    if (producto?.titulo) {
+      document.title = `Dayco Gaming | ${producto.titulo}`;
+    }
+    return () => {
+      document.title = 'Dayco Gaming';
+    };
+  }, [producto?.titulo]);
+
   // Navegación del lightbox con teclado
   useEffect(() => {
     if (lightboxIndex === null) return;

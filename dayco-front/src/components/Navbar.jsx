@@ -35,6 +35,8 @@ function Navbar() {
           <button
             className="navbar__hamburger"
             onClick={() => setMenuAbierto(!menuAbierto)}
+            aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menuAbierto}
           >
             ☰
           </button>
@@ -46,6 +48,8 @@ function Navbar() {
                 className="navbar__dropdown-btn"
                 onClick={() => setDropdownAbierto(!dropdownAbierto)}
                 onBlur={() => setTimeout(() => setDropdownAbierto(false), 160)}
+                aria-haspopup="true"
+                aria-expanded={dropdownAbierto}
               >
                 Productos <span className={`navbar__dropdown-arrow ${dropdownAbierto ? 'navbar__dropdown-arrow--open' : ''}`}>▾</span>
               </button>
