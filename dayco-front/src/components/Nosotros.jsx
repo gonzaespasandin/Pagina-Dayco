@@ -26,7 +26,7 @@ function Nosotros() {
     useEffect(() => {
         api.get('/contenido')
             .then(res=>setStats(res.data))
-            .catch(()=>{});
+            .catch(err => console.error('[Nosotros] Error al cargar stats:', err));
     }, []);
 
     return (

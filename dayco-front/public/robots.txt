@@ -6,4 +6,4 @@ Disallow: /admin
 Disallow: /login
 
 # Sitemap
-Sitemap: https://TU-DOMINIO.com/sitemap.xml
+Sitemap: https://dayco.com.ar/sitemap.xml

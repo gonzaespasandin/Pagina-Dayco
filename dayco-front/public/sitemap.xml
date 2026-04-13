@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Inicio -->
   <url>
-    <loc>https://TU-DOMINIO.com/</loc>
-    <lastmod>2026-04-08</lastmod>
+    <loc>https://dayco.com.ar/</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- ─── Páginas de productos ────────────────────────────────────────────
-       Reemplazá cada <loc> con el ID real de cada producto en tu base de datos.
-       Podés ver los IDs desde el panel admin o consultando GET /api/productos
-  ─────────────────────────────────────────────────────────────────────── -->
-
-  <!-- <url>
-    <loc>https://TU-DOMINIO.com/productos/1</loc>
-    <lastmod>2026-04-08</lastmod>
+  <url>
+    <loc>https://dayco.com.ar/productos/1</loc>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url> -->
+  </url>
+
+  <url>
+    <loc>https://dayco.com.ar/productos/2</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://dayco.com.ar/productos/3</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://dayco.com.ar/productos/4</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://dayco.com.ar/productos/5</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 
 </urlset>

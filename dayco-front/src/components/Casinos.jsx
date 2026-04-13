@@ -9,7 +9,7 @@ function Casinos() {
     useEffect(() => {
         api.get('/casinos')
         .then(res=>setCasinos(res.data))
-        .catch(()=>{});
+        .catch(err => console.error('[Casinos] Error al cargar casinos:', err));
     }, []);
 
     if (casinos.length === 0) return null;

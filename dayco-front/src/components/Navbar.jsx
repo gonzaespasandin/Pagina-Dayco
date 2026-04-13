@@ -17,7 +17,7 @@ function Navbar() {
     }, []);
 
     useEffect(() => {
-        api.get('/productos').then(r => setProductos(r.data)).catch(() => {});
+        api.get('/productos').then(r => setProductos(r.data)).catch(err => console.error('[Navbar] Error al cargar productos:', err));
     }, []);
 
     const esHome = location.pathname === '/';

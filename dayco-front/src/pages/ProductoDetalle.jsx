@@ -58,6 +58,39 @@ function ProductoDetalle() {
     };
   }, [producto?.titulo]);
 
+  useEffect(() => {
+    if (!producto) return;
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'jsonld-product';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: producto.titulo,
+      description: producto.descripcion || producto.subtitulo || '',
+      image: producto.imagen_url || '',
+      url: `https://dayco.com.ar/productos/${id}`,
+      brand: {
+        '@type': 'Brand',
+        name: 'Dayco Gaming',
+      },
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        priceCurrency: 'ARS',
+        seller: {
+          '@type': 'Organization',
+          name: 'Dayco Gaming',
+        },
+      },
+    });
+    document.getElementById('jsonld-product')?.remove();
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById('jsonld-product')?.remove();
+    };
+  }, [producto, id]);
+
   // Navegación del lightbox con teclado
   useEffect(() => {
     if (lightboxIndex === null) return;

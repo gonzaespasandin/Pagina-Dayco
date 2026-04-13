@@ -31,6 +31,8 @@ function Admin() {
       navigate('/login');
       return;
     }
+    // Verifica que el token sea válido contra el servidor antes de mostrar el panel.
+    // Si está vencido o es inválido, el interceptor de 401/403 redirige al login.
     cargarTodo();
   }, []);
 
@@ -44,8 +46,10 @@ function Admin() {
     try {
       const res = await api.get('/productos');
       setProductos(res.data);
-    } catch {
-      navigate('/login');
+    } catch (err) {
+      // Los errores 401/403 los maneja el interceptor de axios (redirige al login).
+      // Otros errores (red, 500, timeout) solo se loguean.
+      console.error('[Admin] Error al cargar productos:', err);
     }
   };
 
@@ -53,14 +57,18 @@ function Admin() {
     try {
       const res = await api.get('/contenido');
       setStats(res.data);
-    } catch { /* silencioso */ }
+    } catch (err) {
+      console.error('[Admin] Error al cargar stats:', err);
+    }
   };
 
   const cargarCasinos = async () => {
     try {
       const res = await api.get('/casinos');
       setCasinos(res.data);
-    } catch { /* silencioso */ }
+    } catch (err) {
+      console.error('[Admin] Error al cargar casinos:', err);
+    }
   };
 
   // --- Handlers Productos ---
