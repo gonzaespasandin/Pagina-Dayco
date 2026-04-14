@@ -44,7 +44,7 @@
 
 ### PageSpeed Insights
 <p align="center">
-  <img src="[https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black](https://ibb.co/V0z3rsgB)" />
+  <img src="https://i.ibb.co/35jkGnph/Whats-App-Image-2026-04-14-at-10-21-20.jpg" />
 </p>
 ---
 
