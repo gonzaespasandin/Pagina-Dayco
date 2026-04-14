@@ -42,6 +42,10 @@
 - ✂️ Recortador de imágenes integrado
 - 🖼️ Conversión automática a WebP con Sharp
 
+### PageSpeed Insights
+<p align="center">
+  <img src="[https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black](https://ibb.co/V0z3rsgB)" />
+</p>
 ---
 
 ## Tech Stack
