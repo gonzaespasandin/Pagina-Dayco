@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../config/database.js';
 import verificarToken from '../middleware/auth.js';
-import upload from '../middleware/upload.js';
+import upload, { procesarImagen } from '../middleware/upload.js';
 
 const router = Router();
 
@@ -23,7 +23,7 @@ const parsearProducto = (p) => {
     return resultado;
 };
 
-router.post('/upload-imagen', verificarToken, upload.single('imagen'), (_req, res) => {
+router.post('/upload-imagen', verificarToken, upload.single('imagen'), procesarImagen, (_req, res) => {
     if (!_req.file) {
         return res.status(400).json({ error: 'No se recibió ninguna imagen.' });
     }
@@ -43,7 +43,7 @@ router.get('/:id', async (req, res) => {
     res.json(parsearProducto(rows[0]));
 });
 
-router.post('/', verificarToken, upload.single('imagen'), async (req, res) => {
+router.post('/', verificarToken, upload.single('imagen'), procesarImagen, async (req, res) => {
     const {
         titulo, descripcion, subtitulo, descripcion_larga,
         features_hero, caracteristicas, galeria,
@@ -68,7 +68,7 @@ router.post('/', verificarToken, upload.single('imagen'), async (req, res) => {
     res.status(201).json(parsearProducto(rows[0]));
 });
 
-router.put('/:id', verificarToken, upload.single('imagen'), async (req, res) => {
+router.put('/:id', verificarToken, upload.single('imagen'), procesarImagen, async (req, res) => {
     const {
         titulo, descripcion, subtitulo, descripcion_larga,
         features_hero, caracteristicas, galeria,

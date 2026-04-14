@@ -7,11 +7,13 @@ function Hero() {
         <div className="hero__video">
           {/* Desktop — se oculta en mobile por CSS, el navegador no lo descarga */}
           <video className="hero__video--desktop" autoPlay loop muted playsInline poster="/fallback.png">
-            <source src="/videonativa.mp4" type="video/mp4" />
+            <source src="/videonativa.webm" type="video/webm" />
+            <source src="/videonativa.mp4"  type="video/mp4" />
           </video>
           {/* Mobile — se oculta en desktop por CSS */}
           <video className="hero__video--mobile" autoPlay loop muted playsInline poster="/fallback-movil.png">
-            <source src="/videonativa-celular.mp4" type="video/mp4" />
+            <source src="/videonativa-celular.webm" type="video/webm" />
+            <source src="/videonativa-celular.mp4"  type="video/mp4" />
           </video>
         </div>
         <div className="hero__overlay" />

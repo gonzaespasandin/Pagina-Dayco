@@ -5,7 +5,7 @@ function Footer() {
       <footer className="footer">
         <div className="footer__container">
           <div className="footer__logo">
-            <img src="/LogoDaycoGaming.png" alt="Dayco Gaming" />
+            <img src="/LogoDaycoGaming.png" alt="Dayco Gaming" width="180" height="60" />
             <p>Soluciones integrales para la industria del entretenimiento</p>
           </div>
           <div className="footer__links">

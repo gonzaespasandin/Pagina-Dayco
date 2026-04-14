@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../config/database.js';
 import verificarToken from '../middleware/auth.js';
-import upload from '../middleware/upload.js';
+import upload, { procesarImagen } from '../middleware/upload.js';
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.get('/', async (_req, res) => {
     res.json(rows);
 });
 
-router.post('/', verificarToken, upload.single('logo'), async (req, res) => {
+router.post('/', verificarToken, upload.single('logo'), procesarImagen, async (req, res) => {
     const { nombre, orden } = req.body;
     const logoUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -23,7 +23,7 @@ router.post('/', verificarToken, upload.single('logo'), async (req, res) => {
     res.status(201).json(rows[0]);
 });
 
-router.put('/:id', verificarToken, upload.single('logo'), async (req, res) => {
+router.put('/:id', verificarToken, upload.single('logo'), procesarImagen, async (req, res) => {
     const { nombre, orden } = req.body;
 
     const [existing] = await pool.query('SELECT * FROM casinos WHERE id = ?', [req.params.id]);

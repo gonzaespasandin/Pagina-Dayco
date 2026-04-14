@@ -4,8 +4,8 @@ import './Reacondicionamiento.css';
 
 // Las dos imágenes del carrusel "Antes / Después"
 const SLIDES = [
-  { src: '/antes-plato.jpg',   label: 'ANTES',   alt: 'Plato antes del reacondicionamiento' },
-  { src: '/despues-plato.jpg', label: 'DESPUÉS',  alt: 'Plato después del reacondicionamiento' },
+  { src: '/antes-plato.webp',   label: 'ANTES',   alt: 'Plato antes del reacondicionamiento' },
+  { src: '/despues-plato.webp', label: 'DESPUÉS',  alt: 'Plato después del reacondicionamiento' },
 ];
 
 // Intervalo de auto-play en milisegundos

@@ -30,7 +30,7 @@ function Navbar() {
     return (
         <nav className={`navbar ${scrolled || !esHome ? 'navbar--solido' : ''}`}>
           <Link to="/" className="navbar__logo" onClick={cerrarTodo}>
-            <img src="/LogoDaycoGaming.png" alt="Dayco Gaming" />
+            <img src="/LogoDaycoGaming.png" alt="Dayco Gaming" width="180" height="60" />
           </Link>
           <button
             className="navbar__hamburger"

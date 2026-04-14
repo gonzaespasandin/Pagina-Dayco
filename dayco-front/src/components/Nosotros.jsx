@@ -52,7 +52,7 @@ function Nosotros() {
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
                 <div className="nosotros__img-card">
-                  <img src="/dayco-empresa.jpg" alt="Dayco en SAGSE 2025" />
+                  <img src="/dayco-empresa.webp" alt="Dayco en SAGSE 2025" />
                   <span>SAGSE 2025</span>
                 </div>
               </motion.div>

@@ -37,6 +37,8 @@ function Casinos() {
                           <img
                             src={`${import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000'}${casino.logo_url}`}
                             alt={casino.nombre}
+                            width="280"
+                            height="160"
                           />
                         ) : (
                           <span className="casinos__nombre">{casino.nombre}</span>
