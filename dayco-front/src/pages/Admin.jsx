@@ -31,9 +31,12 @@ function Admin() {
       navigate('/login');
       return;
     }
-    // Verifica que el token sea válido contra el servidor antes de mostrar el panel.
-    // Si está vencido o es inválido, el interceptor de 401/403 redirige al login.
-    cargarTodo();
+    api.get('/auth/verify')
+      .then(() => cargarTodo())
+      .catch(() => {
+        localStorage.removeItem('token');
+        navigate('/login');
+      });
   }, []);
 
   const cargarTodo = () => {

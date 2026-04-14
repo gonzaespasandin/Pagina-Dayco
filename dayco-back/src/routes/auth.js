@@ -2,6 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import rateLimit from 'express-rate-limit';
+import verificarToken from '../middleware/auth.js';
 
 const router = Router();
 
@@ -40,6 +41,10 @@ router.post('/login', loginLimiter, async (req, res) => {
     );
 
     res.json({ token });
+});
+
+router.get('/verify', verificarToken, (req, res) => {
+    res.json({ ok: true });
 });
 
 export default router;
