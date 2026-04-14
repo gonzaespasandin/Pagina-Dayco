@@ -5,10 +5,11 @@
 </h1>
 
 <p align="center">
-  Sitio web institucional y panel de administración para una empresa argentina de soluciones integrales para casinos y salones de entretenimiento.
+  Sitio web empresarial y panel de administración para una empresa argentina de soluciones integrales para casinos y salones de entretenimiento.
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/node.js-20-6DA55F?style=for-the-badge&logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
   <img src="https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
   <img src="https://img.shields.io/badge/Express-5-000000?style=for-the-badge&logo=express&logoColor=white" />
@@ -20,7 +21,7 @@
 
 ## Descripción
 
-**Dayco Gaming** es una plataforma full-stack que combina un sitio web institucional con un panel de administración privado. Permite gestionar el catálogo de productos, estadísticas y casinos clientes directamente desde el panel admin, sin necesidad de tocar código.
+**Dayco Gaming** es una plataforma full-stack que combina un sitio web empresarial con un panel de administración privado. Permite gestionar el catálogo de productos, estadísticas y casinos clientes directamente desde el panel admin, sin necesidad de tocar código.
 
 ## Funcionalidades
 
