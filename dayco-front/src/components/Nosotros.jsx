@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup';
 import api from '../api/axios';
+import { usePageLoad } from '../context/PageLoadContext';
 import './Nosotros.css';
 
 /**
@@ -20,13 +21,14 @@ function parsearValorStat(valor) {
 
 function Nosotros() {
     const [stats, setStats] = useState([]);
-
     const [contadorActivo, setContadorActivo] = useState(false);
+    const { markReady } = usePageLoad();
 
     useEffect(() => {
         api.get('/contenido')
             .then(res=>setStats(res.data))
-            .catch(err => console.error('[Nosotros] Error al cargar stats:', err));
+            .catch(err => console.error('[Nosotros] Error al cargar stats:', err))
+            .finally(() => markReady());
     }, []);
 
     return (

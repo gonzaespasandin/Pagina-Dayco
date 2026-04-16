@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
+import { usePageLoad } from '../context/PageLoadContext';
 import './ProductGrid.css';
 
 function ProductGrid() {
     const [productos, setProductos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
+    const { markReady } = usePageLoad();
 
     useEffect(() => {
         const fetchProductos = async () => {
@@ -18,6 +20,7 @@ function ProductGrid() {
                 setError('No se pudieron cargar los productos.');
             } finally {
                 setCargando(false);
+                markReady();
             }
         };
 

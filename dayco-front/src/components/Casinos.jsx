@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
+import { usePageLoad } from '../context/PageLoadContext';
 import './Casinos.css';
 
 function Casinos() {
     const [casinos, setCasinos] = useState([]);
+    const { markReady } = usePageLoad();
 
     useEffect(() => {
         api.get('/casinos')
         .then(res=>setCasinos(res.data))
-        .catch(err => console.error('[Casinos] Error al cargar casinos:', err));
+        .catch(err => console.error('[Casinos] Error al cargar casinos:', err))
+        .finally(() => markReady());
     }, []);
 
     if (casinos.length === 0) return null;
