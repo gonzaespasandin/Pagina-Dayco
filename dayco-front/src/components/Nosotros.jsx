@@ -5,6 +5,25 @@ import api from '../api/axios';
 import { usePageLoad } from '../context/PageLoadContext';
 import './Nosotros.css';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:3000';
+
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// Convierte [[texto]] en <span>texto</span> de forma segura contra XSS.
+// El orden es crítico: escapar HTML primero, reemplazar marcadores después.
+function renderizarTexto(texto) {
+    if (!texto) return { __html: '' };
+    const html = escapeHtml(texto).replace(/\[\[([^\]]+)\]\]/g, '<span>$1</span>');
+    return { __html: html };
+}
+
 /**
  * Separa el número y el símbolo de un valor guardado en la BD.
  * Siempre devuelve el símbolo como sufijo para CountUp.
@@ -20,15 +39,22 @@ function parsearValorStat(valor) {
 }
 
 function Nosotros() {
-    const [stats, setStats] = useState([]);
+    const [stats, setStats]       = useState([]);
+    const [contenido, setContenido] = useState(null);
     const [contadorActivo, setContadorActivo] = useState(false);
     const { markReady } = usePageLoad();
 
     useEffect(() => {
-        api.get('/contenido')
-            .then(res=>setStats(res.data))
-            .catch(err => console.error('[Nosotros] Error al cargar stats:', err))
-            .finally(() => markReady());
+        Promise.all([
+            api.get('/contenido'),
+            api.get('/nosotros'),
+        ])
+        .then(([resStats, resContenido]) => {
+            setStats(resStats.data);
+            setContenido(resContenido.data);
+        })
+        .catch(err => console.error('[Nosotros] Error al cargar datos:', err))
+        .finally(() => markReady());
     }, []);
 
     return (
@@ -54,8 +80,11 @@ function Nosotros() {
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
                 <div className="nosotros__img-card">
-                  <img src="/dayco-empresa.webp" alt="Dayco en SAGSE 2025" />
-                  <span>SAGSE 2025</span>
+                  <img
+                    src={contenido?.imagen_url ? `${BASE_URL}${contenido.imagen_url}` : '/dayco-empresa.webp'}
+                    alt={contenido?.subtexto_foto ?? 'Dayco en SAGSE 2025'}
+                  />
+                  <span>{contenido?.subtexto_foto ?? 'SAGSE 2025'}</span>
                 </div>
               </motion.div>
               <motion.div
@@ -65,19 +94,31 @@ function Nosotros() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
               >
-                <p className="nosotros__lead">
-                  Más de <span>35 años de experiencia</span> en soluciones integrales
-                  para la industria del entretenimiento.
-                </p>
-                <p>
-                  Somos una empresa formada por <span>profesionales en electrónica e informática</span>,
-                  pioneros en el desarrollo de ruletas electrónicas y electromecánicas desde 1990.
-                </p>
-                <p>
-                  Contamos con un <span>laboratorio propio</span> donde diseñamos y fabricamos todos
-                  nuestros productos. Nuestra <span>ingeniería de diseño, materia prima y desarrollo
-                  son 100% nacionales</span>.
-                </p>
+                {contenido?.texto_lead ? (
+                  <p className="nosotros__lead" dangerouslySetInnerHTML={renderizarTexto(contenido.texto_lead)} />
+                ) : (
+                  <p className="nosotros__lead">
+                    Más de <span>35 años de experiencia</span> en soluciones integrales
+                    para la industria del entretenimiento.
+                  </p>
+                )}
+                {contenido?.texto_cuerpo ? (
+                  contenido.texto_cuerpo.split('\n\n').map((parrafo, i) => (
+                    <p key={i} dangerouslySetInnerHTML={renderizarTexto(parrafo)} />
+                  ))
+                ) : (
+                  <>
+                    <p>
+                      Somos una empresa formada por <span>profesionales en electrónica e informática</span>,
+                      pioneros en el desarrollo de ruletas electrónicas y electromecánicas desde 1990.
+                    </p>
+                    <p>
+                      Contamos con un <span>laboratorio propio</span> donde diseñamos y fabricamos todos
+                      nuestros productos. Nuestra <span>ingeniería de diseño, materia prima y desarrollo
+                      son 100% nacionales</span>.
+                    </p>
+                  </>
+                )}
               </motion.div>
             </div>
 

@@ -196,6 +196,14 @@
   line-height: 1.5;
 }
 
+.pform__preview-text {
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
 .pform__divider {
   border: none;
   border-top: 1px dashed #e2e8f0;

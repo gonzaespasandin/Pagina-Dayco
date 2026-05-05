@@ -4,6 +4,7 @@ import api from '../api/axios';
 import ProductForm from '../components/admin/ProductForm';
 import StatForm from '../components/admin/StatForm';
 import CasinoForm from '../components/admin/CasinoForm';
+import NosotrosContenidoForm from '../components/admin/NosotrosContenidoForm';
 import './Admin.css';
 
 function Admin() {
@@ -24,6 +25,10 @@ function Admin() {
   const [formCasinoAbierto, setFormCasinoAbierto] = useState(false);
   const [casinoEditando, setCasinoEditando] = useState(null);
 
+  // Nosotros contenido
+  const [nosotrosContenido, setNosotrosContenido] = useState(null);
+  const [formNosotrosContenidoAbierto, setFormNosotrosContenidoAbierto] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +48,7 @@ function Admin() {
     cargarProductos();
     cargarStats();
     cargarCasinos();
+    cargarNosotrosContenido();
   };
 
   const cargarProductos = async () => {
@@ -71,6 +77,15 @@ function Admin() {
       setCasinos(res.data);
     } catch (err) {
       console.error('[Admin] Error al cargar casinos:', err);
+    }
+  };
+
+  const cargarNosotrosContenido = async () => {
+    try {
+      const res = await api.get('/nosotros');
+      setNosotrosContenido(res.data);
+    } catch (err) {
+      console.error('[Admin] Error al cargar contenido Nosotros:', err);
     }
   };
 
@@ -175,11 +190,42 @@ function Admin() {
           </div>
         )}
 
-        {/* ─── NOSOTROS / STATS ─── */}
+        {/* ─── NOSOTROS ─── */}
         {tab === 'nosotros' && (
           <div className="admin__section">
+
+            {/* Contenido de la sección */}
             <div className="admin__section-header">
-              <h2>Estadísticas — Nosotros</h2>
+              <h2>Contenido — Nosotros</h2>
+              {!formNosotrosContenidoAbierto && (
+                <button className="admin__btn-nuevo" onClick={() => setFormNosotrosContenidoAbierto(true)}>
+                  Editar contenido
+                </button>
+              )}
+            </div>
+
+            {formNosotrosContenidoAbierto ? (
+              <NosotrosContenidoForm
+                contenido={nosotrosContenido}
+                onGuardado={() => { setFormNosotrosContenidoAbierto(false); cargarNosotrosContenido(); }}
+                onCancelar={() => setFormNosotrosContenidoAbierto(false)}
+              />
+            ) : nosotrosContenido ? (
+              <div className="admin__tabla" style={{ marginBottom: '2rem' }}>
+                <div className="admin__tabla-fila" style={{ flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Subtexto foto</span>
+                  <span className="admin__tabla-desc">{nosotrosContenido.subtexto_foto}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600, marginTop: '0.5rem' }}>Párrafo destacado</span>
+                  <span className="admin__tabla-desc">{nosotrosContenido.texto_lead}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="admin__empty" style={{ marginBottom: '2rem' }}>No hay contenido cargado aún.</div>
+            )}
+
+            {/* Estadísticas */}
+            <div className="admin__section-header" style={{ marginTop: '0.5rem' }}>
+              <h2>Estadísticas</h2>
               {!formStatAbierto && (
                 <button className="admin__btn-nuevo" onClick={() => { setStatEditando(null); setFormStatAbierto(true); }}>
                   + Nueva estadística
@@ -214,6 +260,7 @@ function Admin() {
                 ))}
               </div>
             )}
+
           </div>
         )}
 

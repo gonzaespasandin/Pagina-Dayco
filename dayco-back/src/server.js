@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.js';
 import productosRoutes from './routes/productos.js';
 import contenidoRoutes from './routes/contenido.js';
 import casinosRoutes from './routes/casinos.js';
+import nosotrosRoutes from './routes/nosotros.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/contenido', contenidoRoutes);
 app.use('/api/casinos', casinosRoutes);
+app.use('/api/nosotros', nosotrosRoutes);
 app.use('/uploads', express.static(join(__dirname, '../uploads')));
 
 app.get('/', (req, res) => {
