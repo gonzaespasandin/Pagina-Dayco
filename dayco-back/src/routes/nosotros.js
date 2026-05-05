@@ -24,10 +24,12 @@ router.get('/', async (_req, res) => {
 });
 
 router.put('/', verificarToken, upload.single('imagen'), procesarImagen, async (req, res) => {
+    console.log('[nosotros] PUT alcanzado — req.file:', req.file ? req.file.filename : 'sin archivo');
     try {
         const subtexto_foto = sanitizarTexto(req.body.subtexto_foto ?? '');
         const texto_lead    = sanitizarTexto(req.body.texto_lead    ?? '');
         const texto_cuerpo  = sanitizarTexto(req.body.texto_cuerpo  ?? '');
+        console.log('[nosotros] campos — lead:', !!texto_lead, 'cuerpo:', !!texto_cuerpo);
 
         if (!texto_lead || !texto_cuerpo) {
             return res.status(400).json({ error: 'texto_lead y texto_cuerpo son obligatorios.' });

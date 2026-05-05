@@ -30,8 +30,8 @@ export async function cropearImagen(imageSrc, pixelCrop, fileName = 'imagen-reco
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) { reject(new Error('Canvas vacío')); return; }
-      resolve(new File([blob], fileName, { type: 'image/png' }));
-    }, 'image/png');
+      resolve(new File([blob], fileName.replace(/\.png$/i, '.jpg'), { type: 'image/jpeg' }));
+    }, 'image/jpeg', 0.85);
   });
 }
 
