@@ -83,8 +83,9 @@ function NosotrosContenidoForm({ contenido, onGuardado, onCancelar }) {
         try {
             await api.put('/nosotros', formData);
             onGuardado();
-        } catch {
-            setError('Error al guardar. Intentá de nuevo.');
+        } catch (err) {
+            const msg = err?.response?.data?.error;
+            setError(msg ? `Error: ${msg}` : 'Error al guardar. Intentá de nuevo.');
         } finally {
             setCargando(false);
         }

@@ -2,7 +2,7 @@ import multer from 'multer';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { writeFile } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,6 +34,7 @@ export async function procesarImagen(req, _res, next) {
     if (!req.file) return next();
 
     try {
+        await mkdir(UPLOADS_DIR, { recursive: true });
         const nombreUnico = `${Date.now()}-imagen-recortada.webp`;
         const destino = join(UPLOADS_DIR, nombreUnico);
 
