@@ -85,8 +85,9 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
       fd.append('imagen', archivo);
       const resp = await api.post('/productos/upload-imagen', fd);
       setGaleria(prev => [...prev, { url: resp.data.url, caption: '' }]);
-    } catch {
-      setError('Error al subir imagen de galería. Intentá de nuevo.');
+    } catch (err) {
+      console.error('[ProductForm] Error al subir imagen de galería:', err);
+      setError(err.response?.data?.error || err.message || 'Error al subir imagen de galería. Intentá de nuevo.');
     } finally {
       setUploadandoGaleria(false);
       e.target.value = '';
@@ -103,8 +104,9 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
       fd.append('imagen', archivo);
       const resp = await api.post('/productos/upload-imagen', fd);
       setGaleria(prev => prev.map((item, i) => i === index ? { ...item, url: resp.data.url } : item));
-    } catch {
-      setError('Error al reemplazar imagen. Intentá de nuevo.');
+    } catch (err) {
+      console.error('[ProductForm] Error al reemplazar imagen:', err);
+      setError(err.response?.data?.error || err.message || 'Error al reemplazar imagen. Intentá de nuevo.');
     } finally {
       setReemplazandoIndex(null);
       e.target.value = '';
@@ -165,8 +167,9 @@ function ProductForm({ producto, onGuardado, onCancelar }) {
         await api.post('/productos', formData);
       }
       onGuardado();
-    } catch {
-      setError('Error al guardar el producto. Intentá de nuevo.');
+    } catch (err) {
+      console.error('[ProductForm] Error al guardar producto:', err);
+      setError(err.response?.data?.error || err.message || 'Error al guardar el producto. Intentá de nuevo.');
     } finally {
       setCargando(false);
     }

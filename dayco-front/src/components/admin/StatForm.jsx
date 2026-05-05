@@ -27,8 +27,9 @@ function StatForm({ stat, onGuardado, onCancelar }) {
         await api.post('/contenido', { titulo, valor });
       }
       onGuardado();
-    } catch {
-      setError('Error al guardar. Intentá de nuevo.');
+    } catch (err) {
+      console.error('[StatForm] Error al guardar:', err);
+      setError(err.response?.data?.error || err.message || 'Error al guardar. Intentá de nuevo.');
     } finally {
       setCargando(false);
     }
