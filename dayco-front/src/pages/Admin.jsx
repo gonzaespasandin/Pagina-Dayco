@@ -212,11 +212,53 @@ function Admin() {
               />
             ) : nosotrosContenido ? (
               <div className="admin__tabla" style={{ marginBottom: '2rem' }}>
-                <div className="admin__tabla-fila" style={{ flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Subtexto foto</span>
-                  <span className="admin__tabla-desc">{nosotrosContenido.subtexto_foto}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600, marginTop: '0.5rem' }}>Párrafo destacado</span>
-                  <span className="admin__tabla-desc">{nosotrosContenido.texto_lead}</span>
+                <div className="admin__tabla-fila" style={{ gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+
+                  {/* Foto */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: nosotrosContenido.imagen_url ? '#22c55e' : '#94a3b8', fontSize: '1rem' }}>
+                      {nosotrosContenido.imagen_url ? '✓' : '✗'}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Foto</span>
+                  </div>
+
+                  {/* Subtexto / alt */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: nosotrosContenido.subtexto_foto ? '#22c55e' : '#94a3b8', fontSize: '1rem' }}>
+                      {nosotrosContenido.subtexto_foto ? '✓' : '✗'}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Subtexto / alt</span>
+                    {nosotrosContenido.subtexto_foto && (
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>— {nosotrosContenido.subtexto_foto}</span>
+                    )}
+                  </div>
+
+                  {/* Párrafo principal */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flex: '1 1 200px', minWidth: 0 }}>
+                    <span style={{ color: nosotrosContenido.texto_lead ? '#22c55e' : '#f87171', fontSize: '1rem' }}>
+                      {nosotrosContenido.texto_lead ? '✓' : '✗'}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#64748b', whiteSpace: 'nowrap' }}>Párrafo principal</span>
+                    {nosotrosContenido.texto_lead && (
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        — {nosotrosContenido.texto_lead.replace(/\[\[|\]\]/g, '').slice(0, 60)}{nosotrosContenido.texto_lead.length > 60 ? '…' : ''}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Párrafos secundarios */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: nosotrosContenido.texto_cuerpo ? '#22c55e' : '#f87171', fontSize: '1rem' }}>
+                      {nosotrosContenido.texto_cuerpo ? '✓' : '✗'}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Párrafos secundarios</span>
+                    {nosotrosContenido.texto_cuerpo && (
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                        — {nosotrosContenido.texto_cuerpo.split('\n\n').filter(Boolean).length} párrafo{nosotrosContenido.texto_cuerpo.split('\n\n').filter(Boolean).length !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </div>
+
                 </div>
               </div>
             ) : (
